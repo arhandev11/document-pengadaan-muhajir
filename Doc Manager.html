@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokumen Pengadaan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0ece4;color:#1a1714;line-height:1.5;font-size:13px}
+input,textarea,select{font-family:inherit;font-size:13px;border:1px solid #ddd8d0;border-radius:6px;padding:7px 10px;background:#fff;color:#1a1714;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{border-color:#8b6914;box-shadow:0 0 0 3px rgba(139,105,20,.12)}
+textarea{resize:vertical;min-height:48px;line-height:1.5}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;transition:all .15s}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#c8c0b4;border-radius:2px}
+::-webkit-scrollbar-track{background:transparent}
+.fl{margin-bottom:12px}
+.fl label{display:block;font-size:11px;font-weight:600;color:#6b5e4e;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.sep{display:flex;align-items:center;gap:8px;margin:18px 0 12px}
+.sep span{font-size:10.5px;font-weight:700;color:#8b6914;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+.sep hr{flex:1;height:1px;background:#e2ddd6;border:none}
+.row{display:flex;gap:10px}
+.half{flex:0 0 calc(50% - 5px)}
+.btn{display:inline-flex;align-items:center;gap:5px;border-radius:6px;font-weight:600;padding:8px 14px;font-size:13px;cursor:pointer}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-primary{background:#8b6914;color:#fff;border:1px solid #8b6914}
+.btn-primary:hover{background:#7a5c10}
+.btn-outline{background:transparent;color:#8b6914;border:1px solid #8b6914}
+.btn-outline:hover{background:#f5ead8}
+.btn-ghost{background:transparent;color:#5c5548;border:1px solid #ddd8d0}
+.btn-ghost:hover{background:#f0ece4}
+.btn-dark{background:transparent;color:#c8c0b4;border:1px solid #2a2520}
+.btn-dark:hover{background:#1a1714}
+.btn-danger{background:transparent;color:#c0392b;border:1px solid #f5c6c2}
+.btn-danger:hover{background:#fdecea}
+.btn-success{background:#2e7d52;color:#fff;border:1px solid #2e7d52}
+.item-card{background:#f9f7f4;border:1px solid #e2ddd6;border-radius:8px;padding:12px 12px 4px;margin-bottom:10px}
+.item-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.item-label{font-size:10.5px;font-weight:700;color:#8b6914;text-transform:uppercase;letter-spacing:.06em}
+.del-btn{background:none;border:none;color:#c0392b;font-size:20px;line-height:1;padding:0 4px;cursor:pointer}
+#topbar{height:56px;background:#0f0d0b;display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0}
+#tabbar{height:46px;background:#fff;border-bottom:1px solid #e2ddd6;display:flex;align-items:flex-end;padding:0 22px;gap:2px;flex-shrink:0;overflow-x:auto}
+.tabbar-tab{background:none;border:none;padding:10px 15px 11px;font-size:13px;font-weight:500;color:#7a6e63;border-bottom:2px solid transparent;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:inherit}
+.tabbar-tab.active{font-weight:700;color:#8b6914;border-bottom-color:#8b6914}
+.tab-badge{background:#8b6914;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center}
+.status-dot{display:flex;align-items:center;gap:5px;font-size:11px}
+.dot{width:6px;height:6px;border-radius:50%}
+#app-body{display:flex;height:calc(100vh - 102px);overflow:hidden}
+#panel-form{width:400px;border-right:1px solid #e2ddd6;overflow-y:auto;background:#fff;padding:18px 18px 48px;flex-shrink:0}
+#panel-preview{flex:1;overflow-y:auto;padding:24px 28px;background:#dedad2}
+.doc-paper{background:#fff;border-radius:3px;box-shadow:0 2px 24px rgba(0,0,0,.10);padding:64px 76px;min-height:1000px;max-width:860px;margin:0 auto}
+#tab-project{flex:1;overflow-y:auto;padding:32px;background:#f0ece4}
+.project-card{background:#fff;border:1px solid #e2ddd6;border-radius:12px;padding:24px;margin-bottom:16px}
+#tab-history{flex:1;overflow:hidden;display:flex;background:#f0ece4}
+.history-main{flex:1;overflow-y:auto;padding:24px 28px}
+.history-sidebar{width:260px;border-left:1px solid #e2ddd6;background:#fff;overflow-y:auto;padding:20px 18px;flex-shrink:0}
+.stat-card{flex:1;background:#fff;border:1px solid #e2ddd6;border-radius:10px;padding:14px 16px}
+.log-entry{background:#fff;border:1px solid #e2ddd6;border-radius:10px;overflow:hidden;margin-bottom:6px}
+.log-entry-header{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.log-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.log-detail{border-top:1px solid #f0ece4;padding:12px 16px;background:#faf9f7;display:none}
+.log-detail.open{display:block}
+.snap-card{background:#faf9f7;border:1px solid #e2ddd6;border-radius:8px;padding:12px;margin-bottom:8px}
+.pasal-card{background:#fff;border:1px solid #ddd8d0;border-radius:10px;margin-bottom:12px;overflow:hidden}
+.pasal-header{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f5ead8;border-bottom:1px solid #e8dcc8;cursor:pointer;user-select:none}
+.pasal-body{padding:14px 14px 10px}
+.pasal-num{width:24px;height:24px;border-radius:6px;background:#8b6914;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+.pasal-title-input{flex:1;background:transparent;border:none;font-weight:700;font-size:13px;color:#1a1714;padding:2px 4px;border-radius:4px;outline:none;cursor:text}
+.pasal-title-input:focus{background:#fff}
+.poin-card{background:#faf9f7;border:1px solid #e2ddd6;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.subpoin-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.subpoin-lbl{font-size:11px;color:#aaa;font-weight:600;min-width:14px}
+.add-poin-btn{background:none;border:1px dashed #8b6914;border-radius:7px;padding:7px;font-size:12px;color:#8b6914;font-weight:600;cursor:pointer;width:100%;margin-top:2px;font-family:inherit}
+.add-poin-btn:hover{background:#fdf6e8}
+.add-pasal-btn{background:none;border:1px dashed #8b6914;border-radius:8px;padding:9px;font-size:12.5px;color:#8b6914;font-weight:600;cursor:pointer;width:100%;margin-top:4px;font-family:inherit}
+.add-pasal-btn:hover{background:#fdf6e8}
+.tipe-btn{flex:1;padding:10px 12px;border-radius:8px;border:2px solid #e2ddd6;background:#fff;font-weight:700;font-size:12.5px;color:#7a6e63;cursor:pointer;font-family:inherit}
+.tipe-btn.active{border-color:#8b6914;background:#f5ead8;color:#8b6914}
+#toast{position:fixed;top:18px;right:18px;z-index:9999;background:#1c3a27;color:#e8f0ea;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.25);animation:toastIn .2s ease;display:none}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.filter-tabs{display:flex;gap:4px;background:#fff;padding:4px;border-radius:8px;border:1px solid #e2ddd6;width:fit-content;flex-wrap:wrap;margin-bottom:20px}
+.filter-tab{background:transparent;color:#7a6e63;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.filter-tab.active{background:#1a1714;color:#fff}
+.day-sep{font-size:11px;font-weight:700;color:#9c9289;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.day-line{flex:1;height:1px;background:#e2ddd6}
+.change-pill{padding:1px 6px;border-radius:4px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+/* Doc preview styles */
+.doc-table{width:100%;border-collapse:collapse;margin-bottom:18px;font-size:11.5px}
+.doc-th{padding:8px 9px;font-weight:600;border:1px solid #222;font-size:11px;text-align:left}
+.doc-th.r{text-align:right}
+.doc-td{padding:7px 9px;border:1px solid #e0e0e0;text-align:left}
+.doc-td.r{text-align:right}
+.doc-td.c{text-align:center}
+.doc-thead-dark{background:#1a1714;color:#fff}
+.doc-tr-alt{background:#f9f7f4}
+.doc-tr-total{background:#f5ead8;font-weight:700}
+.sig-block{display:flex;justify-content:space-between;margin-top:36px}
+.sig-item{text-align:center;min-width:200px}
+.sig-line{border-bottom:1.5px solid #222;padding-bottom:2px;font-weight:700;text-decoration:underline;display:inline-block;min-width:160px}
+@page{margin:1cm;size:A4}
+@media print{
+  .no-print{display:none!important}
+  body{background:white;overflow:auto}
+  html,body{height:auto}
+  #app-body{height:auto;overflow:visible}
+  #panel-form-surat,#panel-form-berita,#panel-form-perjanjian{display:none!important}
+  #panel-preview{padding:0;background:white}
+  .doc-paper{box-shadow:none!important;border-radius:0!important;padding:0!important;max-width:100%}
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  .doc-pasal-block{break-inside:avoid;page-break-inside:avoid}
+  .doc-pasal-header{break-after:avoid;page-break-after:avoid}
+  .doc-pasal-intro{break-after:avoid;page-break-after:avoid}
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- TOP BAR -->
+<div id="topbar" class="no-print">
+  <div style="display:flex;align-items:center;gap:11px">
+    <div style="width:34px;height:34px;background:#8b6914;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:#fff">K</div>
+    <div>
+      <div style="font-size:13.5px;font-weight:700;color:#f0ece4">Doc Manager</div>
+      <div style="font-size:10px;color:#5c5548;letter-spacing:.05em;text-transform:uppercase">Document Management System</div>
+    </div>
+  </div>
+  <div id="topbar-actions" style="display:flex;gap:7px;align-items:center"></div>
+</div>
+
+<!-- TAB BAR -->
+<div id="tabbar" class="no-print">
+  <button class="tabbar-tab active" onclick="switchTab('project')" id="tab-btn-project"><span>⚙</span> Setup Proyek</button>
+  <button class="tabbar-tab" onclick="switchTab('surat')" id="tab-btn-surat"><span>📄</span> Surat Penawaran</button>
+  <button class="tabbar-tab" onclick="switchTab('berita')" id="tab-btn-berita"><span>📋</span> Berita Acara</button>
+  <button class="tabbar-tab" onclick="switchTab('perjanjian')" id="tab-btn-perjanjian"><span>📝</span> Perjanjian Kerjasama</button>
+  <button class="tabbar-tab" onclick="switchTab('nda')" id="tab-btn-nda"><span>🔒</span> NDA</button>
+  <button class="tabbar-tab" onclick="switchTab('history')" id="tab-btn-history"><span>🕒</span> Riwayat <span class="tab-badge" id="badge-history" style="display:none">0</span></button>
+  <div style="margin-left:auto;display:flex;gap:14px;align-items:center;padding-bottom:10px;padding-left:16px">
+    <div class="status-dot" id="status-project"><div class="dot" style="background:#ddd8d0"></div><span style="color:#b0a89e">Setup</span></div>
+    <div class="status-dot" id="status-surat"><div class="dot" style="background:#ddd8d0"></div><span style="color:#b0a89e">Penawaran</span></div>
+    <div class="status-dot" id="status-berita"><div class="dot" style="background:#ddd8d0"></div><span style="color:#b0a89e">Berita Acara</span></div>
+    <div class="status-dot" id="status-perjanjian"><div class="dot" style="background:#ddd8d0"></div><span style="color:#b0a89e">Perjanjian</span></div>
+    <div class="status-dot" id="status-nda"><div class="dot" style="background:#ddd8d0"></div><span style="color:#b0a89e">NDA</span></div>
+  </div>
+</div>
+
+<!-- APP BODY -->
+<div id="app-body">
+
+  <!-- PROJECT TAB -->
+  <div id="tab-project" style="display:flex">
+    <div style="max-width:680px;margin:0 auto;padding:32px;width:100%;overflow-y:auto">
+      <div style="margin-bottom:24px">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Setup Proyek</h2>
+        <p style="color:#7a6e63;font-size:13px">Data pihak digunakan bersama di seluruh dokumen.</p>
+      </div>
+      <div class="project-card" id="project-form-container"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn btn-primary" onclick="switchTab('surat')">→ Surat Penawaran</button>
+        <button class="btn btn-outline" onclick="switchTab('berita')">Berita Acara</button>
+        <button class="btn btn-outline" onclick="switchTab('perjanjian')">📝 Perjanjian Kerjasama</button>
+        <button class="btn btn-ghost" onclick="takeSnapshot()">◉ Snapshot Setup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SURAT TAB -->
+  <div id="tab-surat" style="display:none;flex:1;overflow:hidden">
+    <div id="panel-form-surat" class="no-print" style="width:400px;border-right:1px solid #e2ddd6;overflow-y:auto;background:#fff;padding:18px 18px 48px;flex-shrink:0">
+      <div id="form-header-surat" style="margin-bottom:16px"></div>
+      <div id="surat-form-container"></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 28px;background:#dedad2">
+      <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:11px;font-weight:700;color:#7a6e63;letter-spacing:.06em;text-transform:uppercase">Preview Dokumen</span>
+      </div>
+      <div id="doc-preview-surat" class="doc-paper"></div>
+    </div>
+  </div>
+
+  <!-- BERITA TAB -->
+  <div id="tab-berita" style="display:none;flex:1;overflow:hidden">
+    <div id="panel-form-berita" class="no-print" style="width:400px;border-right:1px solid #e2ddd6;overflow-y:auto;background:#fff;padding:18px 18px 48px;flex-shrink:0">
+      <div id="form-header-berita" style="margin-bottom:16px"></div>
+      <div id="berita-form-container"></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 28px;background:#dedad2">
+      <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:11px;font-weight:700;color:#7a6e63;letter-spacing:.06em;text-transform:uppercase">Preview Dokumen</span>
+      </div>
+      <div id="doc-preview-berita" class="doc-paper"></div>
+    </div>
+  </div>
+
+  <!-- PERJANJIAN TAB -->
+  <div id="tab-perjanjian" style="display:none;flex:1;overflow:hidden">
+    <div id="panel-form-perjanjian" class="no-print" style="width:400px;border-right:1px solid #e2ddd6;overflow-y:auto;background:#fff;padding:18px 18px 48px;flex-shrink:0">
+      <div id="form-header-perjanjian" style="margin-bottom:16px"></div>
+      <div id="perjanjian-form-container"></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 28px;background:#dedad2">
+      <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:11px;font-weight:700;color:#7a6e63;letter-spacing:.06em;text-transform:uppercase">Preview Dokumen</span>
+        <span id="perjanjian-info" style="font-size:11px;color:#9c9289"></span>
+      </div>
+      <div id="doc-preview-perjanjian" class="doc-paper"></div>
+    </div>
+  </div>
+
+  <!-- NDA TAB -->
+  <div id="tab-nda" style="display:none;flex:1;overflow:hidden">
+    <div id="panel-form-nda" class="no-print" style="width:420px;border-right:1px solid #e2ddd6;overflow-y:auto;background:#fff;padding:18px 18px 48px;flex-shrink:0">
+      <div id="form-header-nda" style="margin-bottom:16px"></div>
+      <div id="nda-form-container"></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 28px;background:#dedad2">
+      <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:11px;font-weight:700;color:#7a6e63;letter-spacing:.06em;text-transform:uppercase">Preview Dokumen</span>
+        <span style="font-size:10px;color:#9c9289">Dilindungi UU No. 30/2000 · Pasal 1320 KUHPerdata</span>
+      </div>
+      <div id="doc-preview-nda" class="doc-paper"></div>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div id="tab-history" style="display:none;flex:1;overflow:hidden">
+    <div class="history-main">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px">
+        <div>
+          <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Riwayat Dokumen</h2>
+          <p style="color:#7a6e63;font-size:13px">Semua aktivitas tersimpan secara permanen.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm" onclick="exportLog()">⬇ Export Log</button>
+          <button class="btn btn-danger btn-sm" onclick="clearAllLogs()">✕ Hapus Semua</button>
+        </div>
+      </div>
+      <div id="history-stats" style="display:flex;gap:12px;margin-bottom:22px"></div>
+      <div class="filter-tabs" id="history-filters"></div>
+      <div id="history-list"></div>
+    </div>
+    <div class="history-sidebar">
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Snapshots</div>
+      <div style="font-size:11.5px;color:#9c9289;margin-bottom:16px">Versi tersimpan untuk pemulihan cepat</div>
+      <div id="snapshots-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  UTILITIES
+// ════════════════════════════════════════════════════════
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const todayStr = new Date().toLocaleDateString("id-ID", {day:"numeric",month:"long",year:"numeric"});
+const toNum = v => parseInt(String(v||"").replace(/\D/g,""),10)||0;
+const toRp  = v => { const n=toNum(v); return n ? n.toLocaleString("id-ID") : ""; };
+const autoTotal = it => { const q=toNum(it.jumlah), p=toNum(it.hargaSatuan); return q&&p ? q*p : 0; };
+const fmtDatetime = iso => {
+  const d=new Date(iso);
+  return d.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})+" · "+d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+};
+const fmtDate = iso => new Date(iso).toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function diffObjects(a, b) {
+  const changes=[], keys=new Set([...Object.keys(a||{}),...Object.keys(b||{})]);
+  for(const k of keys){
+    if(["items","pasal"].includes(k)) continue;
+    if(JSON.stringify(a?.[k])!==JSON.stringify(b?.[k])) changes.push({field:k,from:a?.[k],to:b?.[k]});
+  }
+  if(a?.items&&b?.items&&a.items.length!==b.items.length) changes.push({field:"items.count",from:a.items.length,to:b.items.length});
+  if(a?.pasal&&b?.pasal&&a.pasal.length!==b.pasal.length) changes.push({field:"pasal.count",from:a.pasal.length,to:b.pasal.length});
+  return changes;
+}
+
+// ════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════
+const mkPoin = texts => texts.map(t => ({id:uid(), text:t, sub:[]}));
+
+function templateBarang() {
+  return [
+    {id:uid(),judul:"KETENTUAN UMUM",intro:"Istilah-istilah berikut digunakan dalam Perjanjian ini dengan pengertian sebagai berikut:",poin:mkPoin([
+      '"Perjanjian" berarti Surat Perjanjian Pengadaan Barang ini beserta seluruh lampirannya.',
+      '"Barang" berarti seluruh barang yang wajib diserahkan oleh PIHAK KEDUA sebagaimana dirinci dalam Pasal 3.',
+      '"Harga Perjanjian" berarti nilai total pembayaran sebagaimana tercantum dalam Pasal 6 Perjanjian ini.',
+      '"Hari Kerja" berarti setiap hari selain Sabtu, Minggu, dan hari libur nasional Republik Indonesia.',
+      '"Keadaan Kahar" berarti suatu kejadian di luar kendali para pihak sebagaimana diatur dalam Pasal 10.',
+    ])},
+    {id:uid(),judul:"RUANG LINGKUP PENGADAAN",intro:"PIHAK KEDUA wajib menyediakan dan menyerahkan Barang kepada PIHAK PERTAMA yang meliputi:",poin:mkPoin([
+      "Pengadaan barang sesuai spesifikasi teknis yang disepakati.",
+      "Pengiriman dan penyerahan Barang ke lokasi yang ditentukan oleh PIHAK PERTAMA.",
+      "Pengemasan Barang yang layak untuk menjaga kualitas selama proses pengiriman.",
+      "Dokumentasi teknis dan sertifikat keaslian Barang apabila dipersyaratkan.",
+    ])},
+    {id:uid(),judul:"SPESIFIKASI TEKNIS DAN KUALITAS",intro:"Barang yang diadakan wajib memenuhi spesifikasi teknis sebagai berikut:",poin:mkPoin([
+      "Barang harus baru, belum pernah digunakan, dan bebas dari cacat produksi.",
+      "Barang harus sesuai dengan spesifikasi teknis yang tercantum dalam lampiran Perjanjian ini.",
+      "PIHAK KEDUA wajib menyertakan sertifikat kualitas dan/atau dokumen pendukung lainnya.",
+      "PIHAK PERTAMA berhak melakukan inspeksi dan pengujian kualitas sebelum menerima Barang.",
+    ])},
+    {id:uid(),judul:"JANGKA WAKTU PERJANJIAN",intro:"",poin:mkPoin([
+      "Perjanjian ini berlaku efektif sejak tanggal ditandatangani oleh PARA PIHAK.",
+      "Jangka waktu pelaksanaan pengadaan adalah sebagaimana disepakati dalam lampiran jadwal pengiriman.",
+      "Perjanjian berakhir setelah seluruh kewajiban PARA PIHAK dipenuhi dan dinyatakan selesai dalam Berita Acara Serah Terima.",
+    ])},
+    {id:uid(),judul:"KEWAJIBAN PIHAK PERTAMA",intro:"PIHAK PERTAMA berkewajiban untuk:",poin:mkPoin([
+      "Menyampaikan spesifikasi dan jumlah Barang yang dibutuhkan secara tertulis kepada PIHAK KEDUA.",
+      "Menyediakan lokasi penerimaan Barang yang telah siap pada waktu yang disepakati.",
+      "Melakukan pemeriksaan dan penerimaan Barang sesuai prosedur yang ditetapkan.",
+      "Melakukan pembayaran sesuai ketentuan dalam Pasal 6 Perjanjian ini.",
+      "Menjaga kerahasiaan informasi yang diperoleh dari PIHAK KEDUA.",
+    ])},
+    {id:uid(),judul:"KEWAJIBAN PIHAK KEDUA",intro:"PIHAK KEDUA berkewajiban untuk:",poin:mkPoin([
+      "Menyediakan dan menyerahkan Barang sesuai spesifikasi, jumlah, dan jadwal yang disepakati.",
+      "Menjamin bahwa Barang yang diserahkan bebas dari cacat mutu dan sesuai dengan standar kualitas.",
+      "Memberikan garansi atas Barang selama jangka waktu yang disepakati.",
+      "Menyertakan seluruh dokumen pendukung yang dipersyaratkan pada saat serah terima.",
+      "Bertanggung jawab atas penggantian Barang yang cacat atau tidak sesuai spesifikasi.",
+    ])},
+    {id:uid(),judul:"HARGA DAN PEMBAYARAN",intro:"PARA PIHAK sepakat atas ketentuan harga dan pembayaran sebagai berikut:",poin:mkPoin([
+      "Harga Perjanjian telah mencakup semua biaya pengadaan, pengemasan, pengiriman, dan pajak yang berlaku.",
+      "Pembayaran dilakukan melalui transfer bank ke rekening yang ditunjuk PIHAK KEDUA.",
+      "Pembayaran dilaksanakan paling lambat [N] hari kerja setelah Berita Acara Serah Terima ditandatangani.",
+      "Pajak Pertambahan Nilai (PPN) sebesar 11% telah diperhitungkan dalam Harga Perjanjian.",
+    ])},
+    {id:uid(),judul:"PENYERAHAN DAN PEMERIKSAAN BARANG",intro:"",poin:mkPoin([
+      "PIHAK KEDUA wajib menyerahkan Barang tepat waktu sesuai jadwal yang disepakati.",
+      "Pemeriksaan dilakukan oleh PIHAK PERTAMA dalam waktu [N] hari kerja sejak Barang diterima.",
+      "Apabila ditemukan ketidaksesuaian, PIHAK KEDUA wajib melakukan penggantian dalam waktu [N] hari kerja.",
+      "Serah terima Barang dinyatakan selesai setelah ditandatanganinya Berita Acara Serah Terima.",
+    ])},
+    {id:uid(),judul:"GARANSI DAN JAMINAN MUTU",intro:"",poin:mkPoin([
+      "PIHAK KEDUA memberikan garansi atas Barang selama [N] bulan sejak tanggal serah terima.",
+      "Selama masa garansi, PIHAK KEDUA wajib mengganti Barang yang rusak akibat cacat produksi tanpa biaya tambahan.",
+      "Garansi tidak berlaku untuk kerusakan akibat kesalahan penggunaan atau kelalaian PIHAK PERTAMA.",
+    ])},
+    {id:uid(),judul:"KEADAAN KAHAR",intro:"Yang dimaksud Keadaan Kahar dalam Perjanjian ini adalah:",poin:mkPoin([
+      "Suatu peristiwa yang terjadi di luar kendali para pihak, tidak dapat diramalkan, dan tidak dapat dihindari.",
+      "Termasuk namun tidak terbatas pada: bencana alam, perang, kerusuhan, wabah penyakit, kebijakan pemerintah yang berdampak langsung.",
+      "Pihak yang mengalami Keadaan Kahar wajib memberitahukan secara tertulis kepada pihak lainnya dalam waktu 14 hari.",
+    ])},
+    {id:uid(),judul:"PEMUTUSAN PERJANJIAN",intro:"Perjanjian ini dapat diakhiri lebih awal apabila:",poin:mkPoin([
+      "Salah satu pihak tidak memenuhi kewajibannya dan tidak memperbaiki kelalaian tersebut dalam 30 hari setelah peringatan tertulis.",
+      "Salah satu pihak dinyatakan pailit atau dibubarkan berdasarkan ketentuan hukum yang berlaku.",
+      "Terjadi Keadaan Kahar yang berlangsung lebih dari 6 bulan berturut-turut.",
+      "Disepakati bersama oleh PARA PIHAK secara tertulis.",
+    ])},
+    {id:uid(),judul:"PENYELESAIAN SENGKETA",intro:"",poin:mkPoin([
+      "PARA PIHAK berkewajiban menyelesaikan setiap perselisihan secara musyawarah mufakat terlebih dahulu.",
+      "Apabila tidak tercapai kesepakatan dalam 30 hari, para pihak sepakat untuk menyelesaikan melalui mediasi.",
+      "Apabila mediasi tidak berhasil, penyelesaian dilakukan melalui Badan Arbitrase Nasional Indonesia (BANI).",
+    ])},
+    {id:uid(),judul:"KERAHASIAAN DAN PENUTUP",intro:"",poin:mkPoin([
+      "PARA PIHAK sepakat menjaga kerahasiaan seluruh informasi yang diperoleh dalam pelaksanaan Perjanjian ini.",
+      "Hal-hal yang belum diatur akan diatur kemudian dalam addendum yang merupakan bagian tidak terpisahkan.",
+      "Perjanjian ini dibuat dalam rangkap 2 (dua) bermaterai cukup dan memiliki kekuatan hukum yang sama.",
+    ])},
+  ];
+}
+
+function templateJasa() {
+  return [
+    {id:uid(),judul:"OBJEK DAN RUANG LINGKUP PERJANJIAN",intro:"Perjanjian ini mencakup kerjasama dalam penyediaan jasa, yang meliputi:",poin:mkPoin([
+      "Penyediaan jasa oleh PIHAK KEDUA kepada PIHAK PERTAMA sesuai lingkup yang disepakati.",
+      "Pelaksanaan seluruh kegiatan operasional yang diperlukan dalam rangka pemenuhan jasa.",
+      "Pelaporan berkala atas kemajuan dan hasil pelaksanaan jasa kepada PIHAK PERTAMA.",
+      "Koordinasi teknis dan administratif selama periode pelaksanaan jasa.",
+    ])},
+    {id:uid(),judul:"JANGKA WAKTU PERJANJIAN",intro:"",poin:mkPoin([
+      "Perjanjian ini berlaku efektif sejak tanggal penandatanganan oleh PARA PIHAK.",
+      "Jangka waktu pelaksanaan jasa adalah sebagaimana disepakati dalam Lampiran Jadwal Kerja.",
+      "PARA PIHAK dapat menyepakati perpanjangan jangka waktu melalui addendum tertulis.",
+    ])},
+    {id:uid(),judul:"KEWAJIBAN PIHAK PERTAMA",intro:"PIHAK PERTAMA berkewajiban untuk:",poin:mkPoin([
+      "Menyampaikan instruksi, arahan, dan dokumen yang diperlukan kepada PIHAK KEDUA secara tepat waktu.",
+      "Menyediakan akses, fasilitas, dan sumber daya yang dibutuhkan untuk pelaksanaan jasa.",
+      "Melakukan evaluasi dan persetujuan atas hasil kerja PIHAK KEDUA sesuai jadwal yang disepakati.",
+      "Melakukan pembayaran atas jasa yang telah dilaksanakan sesuai ketentuan Perjanjian ini.",
+    ])},
+    {id:uid(),judul:"KEWAJIBAN PIHAK KEDUA",intro:"PIHAK KEDUA berkewajiban untuk:",poin:mkPoin([
+      "Melaksanakan jasa dengan standar profesional tertinggi sesuai lingkup yang disepakati.",
+      "Menyediakan tenaga ahli yang kompeten dan berpengalaman sesuai kebutuhan pekerjaan.",
+      "Menyampaikan laporan kemajuan pekerjaan secara berkala kepada PIHAK PERTAMA.",
+      "Mematuhi seluruh peraturan perundang-undangan yang berlaku dalam pelaksanaan jasa.",
+      "Bertanggung jawab atas seluruh hasil pekerjaan yang diserahkan kepada PIHAK PERTAMA.",
+    ])},
+    {id:uid(),judul:"STANDAR KUALITAS LAYANAN",intro:"PIHAK KEDUA wajib menjamin kualitas layanan sebagai berikut:",poin:mkPoin([
+      "Seluruh pekerjaan dilaksanakan sesuai standar industri dan best practice yang berlaku.",
+      "Capaian kualitas minimum ditetapkan berdasarkan indikator kinerja yang disepakati.",
+      "PIHAK PERTAMA berhak melakukan evaluasi kualitas secara berkala selama periode jasa.",
+      "Apabila kualitas tidak memenuhi standar, PIHAK KEDUA wajib melakukan perbaikan tanpa biaya tambahan.",
+    ])},
+    {id:uid(),judul:"HARGA DAN PEMBAYARAN",intro:"PARA PIHAK sepakat atas ketentuan harga dan pembayaran sebagai berikut:",poin:mkPoin([
+      "Nilai total Perjanjian ini adalah sebagaimana disepakati dalam Lampiran Rincian Biaya.",
+      "Pembayaran dilakukan secara termin/bulanan/selesai pekerjaan sesuai kesepakatan PARA PIHAK.",
+      "Setiap tagihan disertai invoice dan dokumen pendukung yang dipersyaratkan.",
+      "PIHAK PERTAMA wajib melakukan pembayaran paling lambat [N] hari kerja setelah invoice diterima.",
+    ])},
+    {id:uid(),judul:"PELAPORAN DAN PENGAWASAN",intro:"",poin:mkPoin([
+      "PIHAK KEDUA wajib menyampaikan laporan kemajuan pekerjaan secara berkala kepada PIHAK PERTAMA.",
+      "Format, frekuensi, dan mekanisme pelaporan ditetapkan bersama oleh PARA PIHAK.",
+      "PIHAK PERTAMA berhak melakukan pengawasan dan inspeksi atas pelaksanaan jasa sewaktu-waktu.",
+    ])},
+    {id:uid(),judul:"PENGALIHAN DAN SUB-KONTRAK",intro:"",poin:mkPoin([
+      "PIHAK KEDUA tidak diperbolehkan mengalihkan seluruh atau sebagian Perjanjian ini tanpa persetujuan tertulis PIHAK PERTAMA.",
+      "Sub-kontrak sebagian pekerjaan hanya diperbolehkan dengan pemberitahuan tertulis kepada PIHAK PERTAMA.",
+      "PIHAK KEDUA tetap bertanggung jawab penuh atas pekerjaan yang dilaksanakan oleh sub-kontraktor.",
+    ])},
+    {id:uid(),judul:"KEADAAN KAHAR",intro:"",poin:mkPoin([
+      "Suatu peristiwa yang terjadi di luar kendali para pihak, tidak dapat diramalkan, dan tidak dapat dihindari.",
+      "Termasuk: bencana alam, perang, kerusuhan, wabah penyakit, dan kebijakan pemerintah yang berdampak langsung.",
+      "Pihak yang mengalami Keadaan Kahar wajib memberitahukan secara tertulis dalam waktu 14 hari.",
+    ])},
+    {id:uid(),judul:"PEMUTUSAN PERJANJIAN",intro:"Perjanjian ini dapat diakhiri lebih awal apabila:",poin:mkPoin([
+      "Salah satu pihak tidak memenuhi kewajibannya dan tidak memperbaiki kelalaian dalam 30 hari setelah peringatan.",
+      "Salah satu pihak dinyatakan pailit atau dibubarkan berdasarkan hukum yang berlaku.",
+      "Terjadi Keadaan Kahar yang berlangsung lebih dari 6 bulan berturut-turut.",
+      "Disepakati bersama oleh PARA PIHAK secara tertulis.",
+    ])},
+    {id:uid(),judul:"PENYELESAIAN SENGKETA",intro:"",poin:mkPoin([
+      "PARA PIHAK berkewajiban menyelesaikan setiap perselisihan secara musyawarah mufakat terlebih dahulu dalam 30 hari.",
+      "Apabila tidak tercapai kesepakatan, para pihak sepakat untuk menyelesaikan melalui mediasi.",
+      "Apabila mediasi tidak berhasil, penyelesaian dilakukan melalui Badan Arbitrase Nasional Indonesia (BANI).",
+    ])},
+    {id:uid(),judul:"KERAHASIAAN DAN PENUTUP",intro:"",poin:mkPoin([
+      "PARA PIHAK sepakat menjaga kerahasiaan seluruh informasi yang diperoleh dalam pelaksanaan Perjanjian ini.",
+      "Hal-hal yang belum diatur akan diatur kemudian dalam addendum yang merupakan bagian tidak terpisahkan.",
+      "Perjanjian ini dibuat dalam rangkap 2 (dua) bermaterai cukup dan memiliki kekuatan hukum yang sama.",
+    ])},
+  ];
+}
+
+let state = {
+  currentTab: "project",
+  project: {
+    p1Nama:"Iskandarsyah Karim", p1Jabatan:"Direktur",
+    p1Perusahaan:"PT Kimu Edu Indonesia",
+    p1Alamat:"Gedung 18 Office Park, Lantai 25, Suite A2, Jalan TB.Simatupang Kavling 18, RT 002, RW 001, Kelurahan Kebagusan, Kecamatan Pasar Minggu, Jakarta Selatan",
+    p2Nama:"Muhammad Yuliman S", p2Jabatan:"Ketua Tim Pengadaan",
+    p2Organisasi:"Yayasan Muhajir Peduli Indonesia",
+    p2Alamat:"Jalan Cipaku I Nomor 16, RT 002, RW 004, Kelurahan Petogogan, Kecamatan Kebayoran Baru, Kota Jakarta Selatan",
+    nomorSPK:"001/SPK.PROC-YMPI/X/2025", tanggalSPK:"1 Oktober 2025",
+  },
+  surat: {
+    nomor:"", tanggal:todayStr, perihal:"Penawaran Harga Pengadaan Mushaf",
+    namaProgram:"operasional atau Program Wakaf Al-Qur'an Gelombang 7 Yayasan Muhajir Peduli Indonesia",
+    items:[{id:uid(),nama:"",spesifikasi:"",jumlah:"",hargaSatuan:""}],
+    garansi:"[ ]", waktuKirim:"maksimal 7 hari kerja setelah Surat Perintah Kerja (SPK) diterbitkan", masaBerlaku:"30 hari kalender",
+  },
+  berita: {
+    nomor:"", hari:"Kamis", tanggal:"15 Desember 2025", tempat:"Jakarta Selatan",
+    namaKegiatan:"Pengadaan Mushaf dari PT Kimu Edu Indonesia untuk Program Wakaf Al-Qur'an Gelombang 7 Yayasan Muhajir Peduli Indonesia",
+    items:[
+      {id:uid(),nama:"Al-Qur'an Mushaf Non Terjemah 3 Warna Utsmani Depag A5",jumlah:"20.000 eks",spesifikasi:"Sesuai",kondisi:"Baik"},
+      {id:uid(),nama:"Al-Qur'an Mushaf Terjemah 3 Warna Utsmani Depag A5",jumlah:"20.000 eks",spesifikasi:"Sesuai",kondisi:"Baik"},
+      {id:uid(),nama:"Al-Qur'an Mushaf Non Terjemah 3 Warna Utsmani Depag A4",jumlah:"5.000 eks",spesifikasi:"Sesuai",kondisi:"Baik"},
+      {id:uid(),nama:"Al-Qur'an Mushaf Non Terjemah 3 Warna Utsmani Depag A7",jumlah:"10.000 eks",spesifikasi:"Sesuai",kondisi:"Baik"},
+    ],
+    tanggalBuat:"15 Desember 2025", tempatBuat:"Jakarta",
+  },
+  perjanjian: {
+    tipe:"barang", nomor:"", judul:"Perjanjian Pengadaan Barang",
+    tanggal:todayStr, tempat:"Jakarta", hariTtd:"",
+    konsideran:"Bahwa PARA PIHAK bermaksud mengadakan perjanjian kerjasama dalam rangka pengadaan barang untuk mendukung kegiatan operasional PIHAK PERTAMA.",
+    pasal: templateBarang(),
+  },
+  logs: [],
+  snapshots: [],
+  logFilter: "all",
+  collapsedPasal: {},
+  logo: null,   // shared logo base64 for letterhead
+  nda: {
+    nomor: "",
+    hari: "Senin",
+    tanggal: todayStr,
+    tempat: "Jakarta",
+    // Pihak Penerima (individual - receiving party)
+    pnNama: "",
+    pnKtp: "",
+    pnAlamat: "",
+    pnJabatan: "",
+    pnOrganisasi: "",
+    pnNomorKontrak: "",
+    pnTanggalKontrak: "",
+    // Pihak Pengungkap (disclosing party - from project p1)
+    // Recital context fields
+    konteksPelaksanaan: "",
+    jenisDukungan: "",
+    objekKegiatan: "",
+    objekInformasi: "",
+    jangkaWaktu: "2 (dua) tahun",
+  },
+};
+
+// Diff timers
+let editTimers = {};
+let prevDocState = {};
+
+// ════════════════════════════════════════════════════════
+//  PERSISTENCE
+// ════════════════════════════════════════════════════════
+function persist() {
+  try {
+    localStorage.setItem("kimu_logs", JSON.stringify(state.logs));
+    localStorage.setItem("kimu_snapshots", JSON.stringify(state.snapshots));
+    localStorage.setItem("kimu_project", JSON.stringify(state.project));
+    localStorage.setItem("kimu_surat", JSON.stringify(state.surat));
+    localStorage.setItem("kimu_berita", JSON.stringify(state.berita));
+    localStorage.setItem("kimu_perjanjian", JSON.stringify(state.perjanjian));
+    if(state.logo) localStorage.setItem("kimu_logo", state.logo);
+    else localStorage.removeItem("kimu_logo");
+    localStorage.setItem("kimu_nda", JSON.stringify(state.nda));
+  } catch(e) {}
+}
+
+function loadPersisted() {
+  try {
+    const lr = localStorage.getItem("kimu_logs"); if(lr) state.logs = JSON.parse(lr);
+    const sr = localStorage.getItem("kimu_snapshots"); if(sr) state.snapshots = JSON.parse(sr);
+    const pr = localStorage.getItem("kimu_project"); if(pr) state.project = JSON.parse(pr);
+    const sur = localStorage.getItem("kimu_surat"); if(sur) state.surat = JSON.parse(sur);
+    const br = localStorage.getItem("kimu_berita"); if(br) state.berita = JSON.parse(br);
+    const pjr = localStorage.getItem("kimu_perjanjian"); if(pjr) state.perjanjian = JSON.parse(pjr);
+    const lgr = localStorage.getItem("kimu_logo"); if(lgr) state.logo = lgr;
+    const ndar = localStorage.getItem("kimu_nda"); if(ndar) state.nda = JSON.parse(ndar);
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════
+//  LOGGING
+// ════════════════════════════════════════════════════════
+const LOG_CFG = {
+  CREATE:      {label:"Dokumen Dibuat",    color:"#2e7d52",bg:"#e8f5ee",icon:"✦"},
+  EDIT:        {label:"Dokumen Diubah",    color:"#8b6914",bg:"#f5ead8",icon:"✎"},
+  EXPORT_PDF:  {label:"Ekspor PDF",        color:"#1565c0",bg:"#e3f0fb",icon:"⬇"},
+  EXPORT_HTML: {label:"Ekspor HTML",       color:"#6a1b9a",bg:"#f3e8fb",icon:"⬇"},
+  EXPORT_JSON: {label:"Ekspor JSON",       color:"#00796b",bg:"#e0f5f2",icon:"⬇"},
+  PRINT:       {label:"Dicetak",           color:"#37474f",bg:"#eceff1",icon:"⎙"},
+  SNAPSHOT:    {label:"Snapshot Disimpan", color:"#c62828",bg:"#fdecea",icon:"◉"},
+  RESTORE:     {label:"Dipulihkan",        color:"#1b5e20",bg:"#e8f5e9",icon:"↩"},
+};
+const DOC_LABELS = {surat:"Surat Penawaran",berita:"Berita Acara Serah Terima",perjanjian:"Perjanjian Kerjasama",nda:"Pernyataan Kerahasiaan (NDA)",project:"Setup Proyek"};
+
+function writeLog(action, docType, summary, extras={}) {
+  const entry = {id:uid(), action, docType, summary, timestamp:new Date().toISOString(), ...extras};
+  state.logs.push(entry);
+  persist();
+  updateBadge();
+}
+
+function scheduleEditLog(docType, getNew, getPrev, setPrev) {
+  clearTimeout(editTimers[docType]);
+  editTimers[docType] = setTimeout(() => {
+    const curr = getNew(), prev = getPrev();
+    const changes = diffObjects(prev, curr);
+    if(changes.length > 0) {
+      writeLog("EDIT", docType, `${changes.length} field diubah: ${changes.map(c=>c.field).join(", ")}`, {changes, docNum:curr.nomor});
+      setPrev(JSON.parse(JSON.stringify(curr)));
+    }
+  }, 1600);
+}
+
+// ════════════════════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════════════════════
+let toastTimer;
+function notify(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.style.display="none", 3000);
+}
+
+// ════════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ════════════════════════════════════════════════════════
+const docTabs = ["surat","berita","perjanjian","nda"];
+function switchTab(tab) {
+  state.currentTab = tab;
+  document.querySelectorAll(".tabbar-tab").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-btn-"+tab)?.classList.add("active");
+  ["project","surat","berita","perjanjian","nda","history"].forEach(id => {
+    const el = document.getElementById("tab-"+id);
+    if(el) el.style.display = id===tab ? "flex" : "none";
+  });
+  updateTopbarActions();
+  if(tab==="history") renderHistory();
+  if(tab==="project") renderProjectForm();
+  if(tab==="surat") { renderSuratForm(); renderDocSurat(); renderLogoPreview(); }
+  if(tab==="berita") { renderBeritaForm(); renderDocBerita(); renderLogoPreview(); }
+  if(tab==="perjanjian") { renderPerjanjianForm(); renderDocPerjanjian(); }
+  if(tab==="nda") { renderNdaForm(); renderDocNda(); }
+}
+
+function updateTopbarActions() {
+  const c = document.getElementById("topbar-actions");
+  const t = state.currentTab;
+  if(docTabs.includes(t)) {
+    c.innerHTML = `
+      <button class="btn btn-dark btn-sm" onclick="takeSnapshot()">◉ Snapshot</button>
+      <div style="width:1px;height:22px;background:#2a2520"></div>
+      <button class="btn btn-dark btn-sm" onclick="savePDF()">💾 PDF</button>
+      <button class="btn btn-dark btn-sm" onclick="saveHTML()">🌐 HTML</button>
+      <button class="btn btn-dark btn-sm" onclick="saveJSON()">📦 JSON</button>
+      <button class="btn btn-dark btn-sm" onclick="copyJSON()">📋 Copy</button>
+      <div style="width:1px;height:22px;background:#2a2520"></div>
+      <button class="btn btn-primary btn-sm" onclick="printDoc()">🖨 Print</button>
+    `;
+  } else {
+    c.innerHTML = "";
+  }
+}
+
+function updateBadge() {
+  const recent = state.logs.filter(l => (Date.now()-new Date(l.timestamp))<3600000).length;
+  const b = document.getElementById("badge-history");
+  if(recent > 0){ b.style.display="inline"; b.textContent=recent; } else b.style.display="none";
+}
+
+function updateStatusDots() {
+  const cfg = [
+    ["project", !!state.project.p1Nama],
+    ["surat",   !!state.surat.nomor],
+    ["berita",  !!state.berita.nomor],
+    ["perjanjian", !!state.perjanjian.nomor],
+    ["nda",     !!state.nda.nomor],
+  ];
+  cfg.forEach(([id,done]) => {
+    const el = document.getElementById("status-"+id);
+    if(!el) return;
+    el.querySelector(".dot").style.background = done ? "#27ae60" : "#ddd8d0";
+    el.querySelector("span").style.color = done ? "#27ae60" : "#b0a89e";
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  FORM HEADER
+// ════════════════════════════════════════════════════════
+function renderFormHeader(docType) {
+  const labels = {surat:"Surat Penawaran",berita:"Berita Acara Serah Terima",perjanjian:"Perjanjian Kerjasama",nda:"Pernyataan Kerahasiaan (NDA)"};
+  const logCount = state.logs.filter(l=>l.docType===docType).length;
+  const extra = docType==="perjanjian" ? `<span style="margin-left:8px;font-size:11px;background:${state.perjanjian.tipe==="jasa"?"#e3f0fb":"#e8f5ee"};color:${state.perjanjian.tipe==="jasa"?"#1565c0":"#2e7d52"};padding:2px 8px;border-radius:6px;font-weight:700">${state.perjanjian.tipe==="jasa"?"Jasa":"Barang"}</span>` : "";
+  return `
+    <div style="font-size:15px;font-weight:700;margin-bottom:3px">${labels[docType]}${extra}</div>
+    <div style="font-size:11.5px;color:#9c9289">
+      Data pihak dari <button onclick="switchTab('project')" style="background:none;border:none;color:#8b6914;cursor:pointer;font-weight:600;font-size:11.5px;padding:0;font-family:inherit">Setup Proyek ↗</button>
+      · <button onclick="switchTab('history')" style="background:none;border:none;color:#8b6914;cursor:pointer;font-weight:600;font-size:11.5px;padding:0;font-family:inherit">Riwayat (${logCount})</button>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+//  PROJECT FORM
+// ════════════════════════════════════════════════════════
+function renderProjectForm() {
+  const p = state.project;
+  document.getElementById("project-form-container").innerHTML = `
+    <div class="sep"><span>Pihak Pertama — Penyedia</span><hr></div>
+    <div class="row">
+      <div class="fl half"><label>Nama</label><input value="${esc(p.p1Nama)}" oninput="updateProject('p1Nama',this.value)"></div>
+      <div class="fl half"><label>Jabatan</label><input value="${esc(p.p1Jabatan)}" oninput="updateProject('p1Jabatan',this.value)"></div>
+    </div>
+    <div class="fl"><label>Nama Perusahaan</label><input value="${esc(p.p1Perusahaan)}" oninput="updateProject('p1Perusahaan',this.value)"></div>
+    <div class="fl"><label>Alamat</label><textarea rows="2" oninput="updateProject('p1Alamat',this.value)">${esc(p.p1Alamat)}</textarea></div>
+    <div class="sep"><span>Pihak Kedua — Penerima</span><hr></div>
+    <div class="row">
+      <div class="fl half"><label>Nama</label><input value="${esc(p.p2Nama)}" oninput="updateProject('p2Nama',this.value)"></div>
+      <div class="fl half"><label>Jabatan</label><input value="${esc(p.p2Jabatan)}" oninput="updateProject('p2Jabatan',this.value)"></div>
+    </div>
+    <div class="fl"><label>Nama Organisasi</label><input value="${esc(p.p2Organisasi)}" oninput="updateProject('p2Organisasi',this.value)"></div>
+    <div class="fl"><label>Alamat</label><textarea rows="2" oninput="updateProject('p2Alamat',this.value)">${esc(p.p2Alamat)}</textarea></div>
+    <div class="sep"><span>Data SPK</span><hr></div>
+    <div class="row">
+      <div class="fl half"><label>Nomor SPK</label><input value="${esc(p.nomorSPK)}" oninput="updateProject('nomorSPK',this.value)"></div>
+      <div class="fl half"><label>Tanggal SPK</label><input value="${esc(p.tanggalSPK)}" oninput="updateProject('tanggalSPK',this.value)"></div>
+    </div>`;
+}
+
+function updateProject(k, v) {
+  const prev = JSON.parse(JSON.stringify(state.project));
+  state.project[k] = v;
+  persist(); updateStatusDots();
+  scheduleEditLog("project", ()=>state.project, ()=>prevDocState.project||prev, v=>prevDocState.project=v);
+  if(docTabs.includes(state.currentTab)) reRenderPreview();
+}
+
+// ════════════════════════════════════════════════════════
+//  SURAT FORM
+// ════════════════════════════════════════════════════════
+function renderSuratForm() {
+  document.getElementById("form-header-surat").innerHTML = renderFormHeader("surat");
+  const d = state.surat;
+  let itemsHtml = d.items.map((it,i) => `
+    <div class="item-card">
+      <div class="item-card-header">
+        <span class="item-label">Item ${i+1}</span>
+        ${d.items.length>1?`<button class="del-btn" onclick="deleteSuratItem('${it.id}')">×</button>`:""}
+      </div>
+      <div class="fl"><label>Nama Barang</label><input value="${esc(it.nama)}" oninput="updateSuratItem('${it.id}','nama',this.value)"></div>
+      <div class="fl"><label>Spesifikasi Teknis</label><input value="${esc(it.spesifikasi)}" oninput="updateSuratItem('${it.id}','spesifikasi',this.value)"></div>
+      <div class="row">
+        <div class="fl half"><label>Jumlah</label><input value="${esc(it.jumlah)}" oninput="updateSuratItem('${it.id}','jumlah',this.value)"></div>
+        <div class="fl half"><label>Harga Satuan</label><input value="${esc(it.hargaSatuan)}" placeholder="Rp" oninput="updateSuratItem('${it.id}','hargaSatuan',this.value)"></div>
+      </div>
+      <div class="fl"><label>Total (auto)</label><input value="${esc(toRp(autoTotal(it)))}" readonly style="background:#f0e8d5;font-weight:600;color:#8b6914"></div>
+    </div>`).join("");
+  document.getElementById("surat-form-container").innerHTML = `
+    <div class="sep"><span>Logo Kop Surat</span><hr></div>
+    <div id="logo-preview-surat"></div>
+    <div class="sep"><span>Identitas Surat</span><hr></div>
+    <div class="row">
+      <div class="fl half"><label>Nomor Surat</label><input value="${esc(d.nomor)}" placeholder="SP-001/KIE/..." oninput="updateSurat('nomor',this.value)"></div>
+      <div class="fl half"><label>Tanggal</label><input value="${esc(d.tanggal)}" oninput="updateSurat('tanggal',this.value)"></div>
+    </div>
+    <div class="fl"><label>Perihal</label><input value="${esc(d.perihal)}" oninput="updateSurat('perihal',this.value)"></div>
+    <div class="fl"><label>Nama Kegiatan / Program</label><textarea rows="2" oninput="updateSurat('namaProgram',this.value)">${esc(d.namaProgram)}</textarea></div>
+    <div class="sep"><span>Daftar Barang</span><hr></div>
+    ${itemsHtml}
+    <button class="btn btn-outline btn-sm" onclick="addSuratItem()" style="margin-bottom:12px">+ Tambah Item</button>
+    <div class="sep"><span>Keterangan</span><hr></div>
+    <div class="fl"><label>Garansi</label><input value="${esc(d.garansi)}" oninput="updateSurat('garansi',this.value)"></div>
+    <div class="fl"><label>Waktu Pengiriman</label><input value="${esc(d.waktuKirim)}" oninput="updateSurat('waktuKirim',this.value)"></div>
+    <div class="fl"><label>Masa Berlaku Penawaran</label><input value="${esc(d.masaBerlaku)}" oninput="updateSurat('masaBerlaku',this.value)"></div>`;
+}
+
+function updateSurat(k, v) {
+  const prev = prevDocState.surat || JSON.parse(JSON.stringify(state.surat));
+  state.surat[k] = v; persist(); updateStatusDots();
+  scheduleEditLog("surat", ()=>state.surat, ()=>prevDocState.surat||prev, v=>prevDocState.surat=v);
+  renderDocSurat();
+}
+function updateSuratItem(id, k, v) {
+  state.surat.items = state.surat.items.map(it => it.id===id ? {...it,[k]:v} : it);
+  persist(); renderDocSurat();
+  // update total field
+  const card = [...document.querySelectorAll(".item-card")].find(c => c.querySelector(`[oninput*="${id}"]`));
+  if(card){ const tot=card.querySelectorAll("input"); if(tot[tot.length-1]){ const it=state.surat.items.find(i=>i.id===id); if(it) tot[tot.length-1].value=toRp(autoTotal(it)); }}
+}
+function addSuratItem() { state.surat.items.push({id:uid(),nama:"",spesifikasi:"",jumlah:"",hargaSatuan:""}); persist(); renderSuratForm(); renderDocSurat(); }
+function deleteSuratItem(id) { state.surat.items = state.surat.items.filter(it=>it.id!==id); persist(); renderSuratForm(); renderDocSurat(); }
+
+// ════════════════════════════════════════════════════════
+//  BERITA FORM
+// ════════════════════════════════════════════════════════
+function renderBeritaForm() {
+  document.getElementById("form-header-berita").innerHTML = renderFormHeader("berita");
+  const d = state.berita;
+  let itemsHtml = d.items.map((it,i) => `
+    <div class="item-card">
+      <div class="item-card-header">
+        <span class="item-label">Item ${i+1}</span>
+        ${d.items.length>1?`<button class="del-btn" onclick="deleteBeritaItem('${it.id}')">×</button>`:""}
+      </div>
+      <div class="fl"><label>Nama Barang</label><input value="${esc(it.nama)}" oninput="updateBeritaItem('${it.id}','nama',this.value)"></div>
+      <div class="row">
+        <div class="fl half"><label>Jumlah</label><input value="${esc(it.jumlah)}" oninput="updateBeritaItem('${it.id}','jumlah',this.value)"></div>
+        <div class="fl half"><label>Spesifikasi</label><input value="${esc(it.spesifikasi)}" oninput="updateBeritaItem('${it.id}','spesifikasi',this.value)"></div>
+      </div>
+      <div class="fl"><label>Kondisi</label><input value="${esc(it.kondisi)}" oninput="updateBeritaItem('${it.id}','kondisi',this.value)"></div>
+    </div>`).join("");
+  document.getElementById("berita-form-container").innerHTML = `
+    <div class="sep"><span>Logo Kop Surat</span><hr></div>
+    <div id="logo-preview-berita"></div>
+    <div class="sep"><span>Identitas Dokumen</span><hr></div>
+    <div class="fl"><label>Nomor Berita Acara</label><input value="${esc(d.nomor)}" placeholder="BA-001/..." oninput="updateBerita('nomor',this.value)"></div>
+    <div class="row">
+      <div class="fl half"><label>Hari</label><input value="${esc(d.hari)}" oninput="updateBerita('hari',this.value)"></div>
+      <div class="fl half"><label>Tanggal</label><input value="${esc(d.tanggal)}" oninput="updateBerita('tanggal',this.value)"></div>
+    </div>
+    <div class="fl"><label>Tempat</label><input value="${esc(d.tempat)}" oninput="updateBerita('tempat',this.value)"></div>
+    <div class="fl"><label>Nama Kegiatan</label><textarea rows="3" oninput="updateBerita('namaKegiatan',this.value)">${esc(d.namaKegiatan)}</textarea></div>
+    <div class="sep"><span>Daftar Barang</span><hr></div>
+    ${itemsHtml}
+    <button class="btn btn-outline btn-sm" onclick="addBeritaItem()" style="margin-bottom:12px">+ Tambah Item</button>
+    <div class="sep"><span>Penandatanganan</span><hr></div>
+    <div class="row">
+      <div class="fl half"><label>Tempat Pembuatan</label><input value="${esc(d.tempatBuat)}" oninput="updateBerita('tempatBuat',this.value)"></div>
+      <div class="fl half"><label>Tanggal Pembuatan</label><input value="${esc(d.tanggalBuat)}" oninput="updateBerita('tanggalBuat',this.value)"></div>
+    </div>`;
+}
+
+function updateBerita(k, v) {
+  const prev = prevDocState.berita || JSON.parse(JSON.stringify(state.berita));
+  state.berita[k] = v; persist(); updateStatusDots();
+  scheduleEditLog("berita", ()=>state.berita, ()=>prevDocState.berita||prev, v=>prevDocState.berita=v);
+  renderDocBerita();
+}
+function updateBeritaItem(id, k, v) { state.berita.items = state.berita.items.map(it=>it.id===id?{...it,[k]:v}:it); persist(); renderDocBerita(); }
+function addBeritaItem() { state.berita.items.push({id:uid(),nama:"",jumlah:"",spesifikasi:"Sesuai",kondisi:"Baik"}); persist(); renderBeritaForm(); renderDocBerita(); }
+function deleteBeritaItem(id) { state.berita.items=state.berita.items.filter(it=>it.id!==id); persist(); renderBeritaForm(); renderDocBerita(); }
+
+// ════════════════════════════════════════════════════════
+//  PERJANJIAN FORM
+// ════════════════════════════════════════════════════════
+function renderPerjanjianForm() {
+  document.getElementById("form-header-perjanjian").innerHTML = renderFormHeader("perjanjian");
+  const d = state.perjanjian;
+  const pasalHtml = d.pasal.map((ps, idx) => renderPasalCard(ps, idx, d.pasal.length)).join("");
+  document.getElementById("perjanjian-form-container").innerHTML = `
+    <div class="sep"><span>Jenis Perjanjian</span><hr></div>
+    <div class="row" style="margin-bottom:16px">
+      <button class="tipe-btn ${d.tipe==='barang'?'active':''}" onclick="switchTipePerjanjian('barang')">📦 Pengadaan Barang</button>
+      <button class="tipe-btn ${d.tipe==='jasa'?'active':''}" onclick="switchTipePerjanjian('jasa')">🔧 Pengadaan Jasa</button>
+    </div>
+    <div class="sep"><span>Identitas Dokumen</span><hr></div>
+    <div class="fl"><label>Judul Perjanjian</label><input value="${esc(d.judul)}" oninput="updatePerjanjian('judul',this.value)"></div>
+    <div class="row">
+      <div class="fl half"><label>Nomor</label><input value="${esc(d.nomor)}" placeholder="PKS-001/..." oninput="updatePerjanjian('nomor',this.value)"></div>
+      <div class="fl half"><label>Tanggal</label><input value="${esc(d.tanggal)}" oninput="updatePerjanjian('tanggal',this.value)"></div>
+    </div>
+    <div class="row">
+      <div class="fl half"><label>Tempat Penandatanganan</label><input value="${esc(d.tempat)}" oninput="updatePerjanjian('tempat',this.value)"></div>
+      <div class="fl half"><label>Hari</label><input value="${esc(d.hariTtd||'')}" placeholder="Senin" oninput="updatePerjanjian('hariTtd',this.value)"></div>
+    </div>
+    <div class="fl"><label>Konsideran / Menimbang</label><textarea rows="3" placeholder="Latar belakang / tujuan perjanjian..." oninput="updatePerjanjian('konsideran',this.value)">${esc(d.konsideran)}</textarea></div>
+    <div class="sep"><span>Pasal-Pasal (${d.pasal.length} pasal)</span><hr></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:11.5px;color:#9c9289">Klik header pasal untuk expand/collapse</span>
+      <button class="btn btn-ghost btn-sm" onclick="addPasal()">+ Pasal Baru</button>
+    </div>
+    <div id="pasal-list">${pasalHtml}</div>
+    <button class="add-pasal-btn" onclick="addPasal()">+ Tambah Pasal</button>`;
+}
+
+function renderPasalCard(ps, idx, total) {
+  const collapsed = state.collapsedPasal[ps.id];
+  const poinHtml = ps.poin.map((pn, pi) => `
+    <div class="poin-card">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <div style="flex:1"><textarea rows="2" style="font-size:12.5px;min-height:40px" oninput="updatePoin('${ps.id}','${pn.id}','text',this.value)">${esc(pn.text)}</textarea></div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+          <button onclick="addSubPoin('${ps.id}','${pn.id}')" style="background:#f0e8d5;border:none;border-radius:5px;padding:4px 8px;font-size:11px;color:#8b6914;font-weight:600;cursor:pointer;font-family:inherit">+sub</button>
+          <button onclick="deletePoin('${ps.id}','${pn.id}')" style="background:none;border:none;color:#c0392b;font-size:16px;line-height:1;padding:2px 6px;cursor:pointer">×</button>
+        </div>
+      </div>
+      ${(pn.sub||[]).length>0?`<div style="margin-top:8px;padding-left:16px;border-left:2px solid #e2ddd6">${(pn.sub).map(sb=>`
+        <div class="subpoin-row">
+          <span class="subpoin-lbl">a.</span>
+          <input value="${esc(sb.text)}" style="flex:1;font-size:12px" oninput="updateSubPoin('${ps.id}','${pn.id}','${sb.id}',this.value)">
+          <button onclick="deleteSubPoin('${ps.id}','${pn.id}','${sb.id}')" style="background:none;border:none;color:#c0392b;font-size:15px;cursor:pointer;flex-shrink:0">×</button>
+        </div>`).join("")}</div>`:``}
+    </div>`).join("");
+  return `
+    <div class="pasal-card" id="pc-${ps.id}">
+      <div class="pasal-header" onclick="togglePasal('${ps.id}')">
+        <div class="pasal-num">${idx+1}</div>
+        <input class="pasal-title-input" value="${esc(ps.judul)}" onclick="event.stopPropagation()" oninput="updatePasalJudul('${ps.id}',this.value)" placeholder="Judul Pasal...">
+        <div style="display:flex;gap:4px;align-items:center" onclick="event.stopPropagation()">
+          <button onclick="movePasal('${ps.id}',-1)" ${idx===0?'disabled':''} style="background:none;border:1px solid #e2ddd6;border-radius:4px;padding:2px 7px;font-size:12px;color:${idx===0?'#ccc':'#666'};cursor:${idx===0?'default':'pointer'}">↑</button>
+          <button onclick="movePasal('${ps.id}',1)" ${idx===total-1?'disabled':''} style="background:none;border:1px solid #e2ddd6;border-radius:4px;padding:2px 7px;font-size:12px;color:${idx===total-1?'#ccc':'#666'};cursor:${idx===total-1?'default':'pointer'}">↓</button>
+          <button onclick="deletePasal('${ps.id}')" style="background:none;border:1px solid #f5c6c2;border-radius:4px;padding:2px 7px;font-size:11px;color:#c0392b;cursor:pointer;font-family:inherit">Hapus</button>
+          <span style="font-size:12px;color:#aaa;margin-left:2px">${collapsed?'▼':'▲'}</span>
+        </div>
+      </div>
+      ${!collapsed ? `
+      <div class="pasal-body">
+        <div class="fl"><label>Kalimat Pembuka (opsional)</label><textarea rows="2" style="font-size:12.5px" placeholder="Contoh: PIHAK KEDUA berkewajiban untuk:" oninput="updatePasalIntro('${ps.id}',this.value)">${esc(ps.intro)}</textarea></div>
+        <div style="font-size:11px;font-weight:700;color:#6b5e4e;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px">Butir-Butir Poin</div>
+        ${poinHtml}
+        <button class="add-poin-btn" onclick="addPoin('${ps.id}')">+ Tambah Poin</button>
+      </div>` : ""}
+    </div>`;
+}
+
+function togglePasal(id) { state.collapsedPasal[id] = !state.collapsedPasal[id]; renderPerjanjianForm(); renderDocPerjanjian(); }
+function updatePerjanjian(k, v) { state.perjanjian[k]=v; persist(); updateStatusDots(); scheduleEditLog("perjanjian",()=>state.perjanjian,()=>prevDocState.perjanjian||state.perjanjian,v=>prevDocState.perjanjian=v); renderDocPerjanjian(); if(k==="nomor") document.getElementById("form-header-perjanjian").innerHTML=renderFormHeader("perjanjian"); }
+function updatePasalJudul(pid, v) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,judul:v}:p); persist(); renderDocPerjanjian(); }
+function updatePasalIntro(pid, v) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,intro:v}:p); persist(); renderDocPerjanjian(); }
+function addPasal() { state.perjanjian.pasal.push({id:uid(),judul:"Pasal Baru",intro:"",poin:[]}); persist(); renderPerjanjianForm(); renderDocPerjanjian(); }
+function deletePasal(pid) { state.perjanjian.pasal = state.perjanjian.pasal.filter(p=>p.id!==pid); persist(); renderPerjanjianForm(); renderDocPerjanjian(); }
+function movePasal(pid, dir) {
+  const arr=[...state.perjanjian.pasal], idx=arr.findIndex(p=>p.id===pid), to=idx+dir;
+  if(to<0||to>=arr.length) return;
+  [arr[idx],arr[to]]=[arr[to],arr[idx]]; state.perjanjian.pasal=arr; persist(); renderPerjanjianForm(); renderDocPerjanjian();
+}
+function addPoin(pid) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,poin:[...p.poin,{id:uid(),text:"",sub:[]}]}:p); persist(); renderPerjanjianForm(); renderDocPerjanjian(); }
+function deletePoin(pid, pnid) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,poin:p.poin.filter(pn=>pn.id!==pnid)}:p); persist(); renderPerjanjianForm(); renderDocPerjanjian(); }
+function updatePoin(pid, pnid, k, v) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,poin:p.poin.map(pn=>pn.id===pnid?{...pn,[k]:v}:pn)}:p); persist(); renderDocPerjanjian(); }
+function addSubPoin(pid, pnid) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,poin:p.poin.map(pn=>pn.id===pnid?{...pn,sub:[...(pn.sub||[]),{id:uid(),text:""}]}:pn)}:p); persist(); renderPerjanjianForm(); renderDocPerjanjian(); }
+function updateSubPoin(pid, pnid, sid, v) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,poin:p.poin.map(pn=>pn.id===pnid?{...pn,sub:(pn.sub||[]).map(s=>s.id===sid?{...s,text:v}:s)}:pn)}:p); persist(); renderDocPerjanjian(); }
+function deleteSubPoin(pid, pnid, sid) { state.perjanjian.pasal = state.perjanjian.pasal.map(p=>p.id===pid?{...p,poin:p.poin.map(pn=>pn.id===pnid?{...pn,sub:(pn.sub||[]).filter(s=>s.id!==sid)}:pn)}:p); persist(); renderPerjanjianForm(); renderDocPerjanjian(); }
+function switchTipePerjanjian(tipe) {
+  if(state.perjanjian.tipe===tipe) return;
+  if(!confirm("Mengganti tipe akan mereset semua pasal ke template default. Lanjutkan?")) return;
+  state.perjanjian.tipe = tipe;
+  state.perjanjian.judul = tipe==="jasa" ? "Perjanjian Pengadaan Jasa" : "Perjanjian Pengadaan Barang";
+  state.perjanjian.pasal = tipe==="jasa" ? templateJasa() : templateBarang();
+  state.collapsedPasal = {};
+  persist(); renderPerjanjianForm(); renderDocPerjanjian();
+}
+
+function reRenderPreview() {
+  if(state.currentTab==="surat") renderDocSurat();
+  else if(state.currentTab==="berita") renderDocBerita();
+  else if(state.currentTab==="perjanjian") renderDocPerjanjian();
+  else if(state.currentTab==="nda") renderDocNda();
+}
+
+// ════════════════════════════════════════════════════════
+//  DOCUMENT PREVIEW RENDERERS
+// ════════════════════════════════════════════════════════
+function renderDocSurat() {
+  const d=state.surat, p=state.project;
+  const grand = d.items.reduce((s,it)=>s+autoTotal(it),0);
+  const rows = d.items.map((it,i)=>`
+    <tr class="${i%2?'doc-tr-alt':''}">
+      <td class="doc-td c">${i+1}</td>
+      <td class="doc-td">${esc(it.nama)}</td>
+      <td class="doc-td">${esc(it.spesifikasi)}</td>
+      <td class="doc-td r">${esc(it.jumlah)}</td>
+      <td class="doc-td r">${esc(toRp(it.hargaSatuan))}</td>
+      <td class="doc-td r">${esc(toRp(autoTotal(it)))}</td>
+    </tr>`).join("");
+  document.getElementById("doc-preview-surat").innerHTML = `
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;line-height:1.75;color:#111;position:relative">
+      ${state.logo ? `<img src="${state.logo}" style="position:absolute;top:0;right:0;max-height:72px;max-width:150px;object-fit:contain;z-index:0;opacity:1">` : `<div class="no-print" style="position:absolute;top:0;right:0;width:120px;height:56px;border:1.5px dashed #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#ccc;text-align:center;line-height:1.3;z-index:0">Logo<br>Perusahaan</div>`}
+      <div style="position:relative;z-index:1">
+      <div style="margin-bottom:4px">Nomor: <strong>${esc(d.nomor)||"_______________"}</strong></div>
+      <div style="margin-bottom:24px">Perihal: <strong>${esc(d.perihal)}</strong></div>
+      <div style="margin-bottom:22px;line-height:1.9">
+        <div><strong>Kepada Yth.</strong></div><div><strong>${esc(p.p2Jabatan)}</strong></div>
+        <div><strong>${esc(p.p2Organisasi)}</strong></div><div>di tempat</div>
+      </div>
+      <p style="margin-bottom:18px">Dengan hormat,</p>
+      <p style="margin-bottom:20px;text-align:justify">Bersama surat ini kami dari <strong>${esc(p.p1Perusahaan)}</strong> menyampaikan penawaran harga untuk kegiatan Pengadaan Mushaf untuk keperluan ${esc(d.namaProgram)} sebagai berikut:</p>
+      <table class="doc-table">
+        <thead><tr class="doc-thead-dark">
+          <th class="doc-th">No.</th><th class="doc-th">Nama Barang</th><th class="doc-th">Spesifikasi Teknis</th>
+          <th class="doc-th r">Jumlah</th><th class="doc-th r">Harga Satuan (Rp)</th><th class="doc-th r">Total Harga (Rp)</th>
+        </tr></thead>
+        <tbody>${rows}<tr class="doc-tr-total"><td class="doc-td" colspan="5" style="text-align:right">Total Penawaran</td><td class="doc-td r">${esc(toRp(grand))}</td></tr></tbody>
+      </table>
+      <div style="margin-bottom:20px"><strong>Keterangan:</strong><ul style="padding-left:22px;margin-top:6px;font-style:italic">
+        <li>Barang baru dan bergaransi resmi selama ${esc(d.garansi)}</li>
+        <li>Waktu pengiriman: ${esc(d.waktuKirim)}.</li>
+        <li>Masa berlaku penawaran: ${esc(d.masaBerlaku)}.</li>
+      </ul></div>
+      <p style="margin-bottom:44px;text-align:justify">Kami berharap penawaran ini dapat menjadi pertimbangan dan kami siap memberikan klarifikasi apabila diperlukan.</p>
+      <div class="sig-block" style="justify-content:flex-end">
+        <div class="sig-item">
+          <div>Hormat kami,</div><div style="font-weight:600">${esc(p.p1Perusahaan)}</div>
+          <div style="height:64px"></div>
+          <div class="sig-line">${esc(p.p1Nama)}</div><div>${esc(p.p1Jabatan)}</div>
+        </div>
+      </div>
+      </div>
+    </div>`;
+}
+
+function renderDocBerita() {
+  const d=state.berita, p=state.project;
+  const rows = d.items.map((it,i)=>`
+    <tr class="${i%2?'doc-tr-alt':''}">
+      <td class="doc-td c">${i+1}</td>
+      <td class="doc-td">${esc(it.nama)}</td>
+      <td class="doc-td">${esc(it.jumlah)}</td>
+      <td class="doc-td">${esc(it.spesifikasi)}</td>
+      <td class="doc-td">${esc(it.kondisi)}</td>
+    </tr>`).join("");
+  const parties=[
+    {no:"I.",nm:p.p1Nama,jbt:p.p1Jabatan,alm:p.p1Alamat,org:p.p1Perusahaan,lbl:"Pihak Pertama"},
+    {no:"II.",nm:p.p2Nama,jbt:p.p2Jabatan,alm:p.p2Alamat,org:p.p2Organisasi,lbl:"Pihak Kedua"},
+  ];
+  const pihakHtml = parties.map(ph=>`
+    <div style="margin-bottom:18px">
+      <table style="width:100%;font-size:12.5px"><tbody>
+        ${[["Nama",ph.nm],["Jabatan",ph.jbt],["Alamat",ph.alm]].map(([k,v],i)=>`<tr><td style="width:24px;font-weight:700;vertical-align:top">${i===0?ph.no:""}</td><td style="width:72px;vertical-align:top">${k}</td><td style="width:14px;text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(v)}</td></tr>`).join("")}
+      </tbody></table>
+      <div style="padding-left:24px;margin-top:4px">Bertindak untuk dan atas nama <strong>${esc(ph.org)}</strong>, selanjutnya disebut sebagai <strong>${ph.lbl}</strong>.</div>
+    </div>`).join("");
+  document.getElementById("doc-preview-berita").innerHTML = `
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;line-height:1.75;color:#111;position:relative">
+      ${state.logo ? `<img src="${state.logo}" style="position:absolute;top:0;right:0;max-height:72px;max-width:150px;object-fit:contain;z-index:0;opacity:1">` : `<div class="no-print" style="position:absolute;top:0;right:0;width:110px;height:56px;border:1.5px dashed #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#ccc;text-align:center;line-height:1.3;z-index:0">Logo<br>Perusahaan</div>`}
+      <div style="position:relative;z-index:1">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px">Berita Acara Serah Terima</div>
+        <div>Nomor: ${esc(d.nomor)||"_______________"}</div>
+        <div style="height:2.5px;background:#1a1714;margin:10px auto 0;width:100px"></div>
+      </div>
+      <p style="margin-bottom:22px;text-align:justify">Pada hari ini <strong>${esc(d.hari)}</strong>, tanggal <strong>${esc(d.tanggal)}</strong> bertempat di <strong>${esc(d.tempat)}</strong>, telah disetujui dan ditandatangani Berita Acara Serah Terima, oleh dan antara:</p>
+      ${pihakHtml}
+      <p style="margin-bottom:24px;text-align:justify">Dalam rangka pelaksanaan ${esc(d.namaKegiatan)}, maka para pihak sepakat untuk melaksanakan serah terima barang sebagaimana tercantum pada pasal berikut:</p>
+      <div style="text-align:center;font-weight:700;margin-bottom:2px">PASAL 1</div>
+      <div style="text-align:center;font-weight:700;margin-bottom:12px">OBJEK SERAH TERIMA</div>
+      <p style="margin-bottom:12px">Pihak Pertama telah menyerahkan kepada Pihak Kedua berupa barang dengan rincian sebagai berikut:</p>
+      <table class="doc-table">
+        <thead><tr class="doc-thead-dark"><th class="doc-th c">No</th><th class="doc-th">Nama Barang</th><th class="doc-th">Jumlah</th><th class="doc-th">Spesifikasi</th><th class="doc-th">Kondisi</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <p style="margin-bottom:20px;text-align:justify">Barang-barang tersebut telah diterima dalam kondisi baik dan lengkap, sesuai dengan Surat Perintah Kerja (SPK) No. <strong>${esc(p.nomorSPK)}</strong> tanggal <strong>${esc(p.tanggalSPK)}</strong></p>
+      <div style="text-align:center;font-weight:700;margin-bottom:2px">PASAL 2</div>
+      <div style="text-align:center;font-weight:700;margin-bottom:12px">KONDISI PENYERAHAN</div>
+      <ol style="padding-left:22px;margin-bottom:22px">
+        <li style="margin-bottom:8px;text-align:justify">Pihak Kedua telah memeriksa dan menerima barang-barang sebagaimana disebutkan dalam Pasal 1, sesuai dengan jumlah, jenis, dan spesifikasi yang tercantum dalam dokumen pengadaan.</li>
+        <li style="margin-bottom:8px;text-align:justify">Dengan ditandatanganinya Berita Acara ini, Pihak Pertama dianggap telah menyelesaikan kewajibannya sebagaimana diatur dalam SPK.</li>
+        <li style="text-align:justify">Apabila di kemudian hari ditemukan kerusakan atau ketidaksesuaian minor, Pihak Pertama akan melakukan perbaikan atau penggantian sesuai ketentuan garansi.</li>
+      </ol>
+      <div style="text-align:center;font-weight:700;margin-bottom:2px">PASAL 3</div>
+      <div style="text-align:center;font-weight:700;margin-bottom:12px">PENUTUP</div>
+      <p style="margin-bottom:28px;text-align:justify">Demikian Berita Acara Serah Terima Barang ini dibuat dan ditandatangani oleh kedua belah pihak dengan penuh kesadaran, tanpa paksaan dari pihak mana pun, untuk digunakan sebagaimana mestinya.</p>
+      <p style="margin-bottom:36px">Dibuat dan ditandatangani di ${esc(d.tempatBuat)}, tanggal ${esc(d.tanggalBuat)}</p>
+      <div class="sig-block">
+        ${[["Pihak Pertama",p.p1Perusahaan,p.p1Nama,p.p1Jabatan],["Pihak Kedua",p.p2Organisasi,p.p2Nama,p.p2Jabatan]].map(([lbl,org,nm,jbt])=>`
+          <div class="sig-item"><div>${lbl}</div><div style="font-weight:600">${esc(org)}</div><div style="height:64px"></div><div class="sig-line">${esc(nm)}</div><div>${esc(jbt)}</div></div>`).join("")}
+      </div>
+      </div>
+    </div>`;
+}
+
+function renderDocPerjanjian() {
+  const d=state.perjanjian, p=state.project;
+  const tipeLabel = d.tipe==="jasa" ? "Pengadaan Jasa" : "Pengadaan Barang";
+  const pihakHtml = [
+    {no:"I.",nm:p.p1Nama,jbt:p.p1Jabatan,org:p.p1Perusahaan,alm:p.p1Alamat,lbl:"PIHAK PERTAMA"},
+    {no:"II.",nm:p.p2Nama,jbt:p.p2Jabatan,org:p.p2Organisasi,alm:p.p2Alamat,lbl:"PIHAK KEDUA"},
+  ].map(ph=>`
+    <div style="margin-bottom:20px;padding-left:20px">
+      <table style="width:100%;font-size:12.5px"><tbody>
+        ${[["Nama",ph.nm],["Jabatan",ph.jbt],["Bertindak atas nama",ph.org],["Alamat",ph.alm]].map(([k,v],i)=>`<tr><td style="width:28px;font-weight:700;vertical-align:top;padding-right:6px">${i===0?ph.no:""}</td><td style="width:140px;vertical-align:top;color:#444">${k}</td><td style="width:16px;text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(v)}</td></tr>`).join("")}
+      </tbody></table>
+      <div style="padding-left:28px;margin-top:4px;font-style:italic">Selanjutnya disebut sebagai <strong>"${ph.lbl}"</strong>.</div>
+    </div>`).join("");
+  const pasalHtml = d.pasal.map((ps,idx)=>`
+    <div class="doc-pasal-block" style="margin-bottom:24px">
+      <div class="doc-pasal-header" style="text-align:center;font-weight:700;font-size:13px;margin-bottom:2px">PASAL ${idx+1}</div>
+      <div class="doc-pasal-header" style="text-align:center;font-weight:700;font-size:13px;margin-bottom:10px;text-transform:uppercase">${esc(ps.judul)}</div>
+      ${ps.intro?`<p class="doc-pasal-intro" style="margin-bottom:10px;text-align:justify">${esc(ps.intro)}</p>`:""}
+      ${ps.poin.length>0?`<ol style="padding-left:24px;line-height:2">${ps.poin.map(pn=>`
+        <li style="margin-bottom:${(pn.sub||[]).length?'6px':'2px'};text-align:justify">${esc(pn.text)}
+          ${(pn.sub||[]).length>0?`<ol type="a" style="padding-left:22px;margin-top:4px">${pn.sub.map(sb=>`<li style="margin-bottom:2px;text-align:justify">${esc(sb.text)}</li>`).join("")}</ol>`:""}
+        </li>`).join("")}</ol>`:""}
+    </div>`).join("");
+  document.getElementById("doc-preview-perjanjian").innerHTML = `
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;line-height:1.8;color:#111">
+      <div style="text-align:center;margin-bottom:30px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">${esc(d.judul||"Surat Perjanjian Kerjasama")}</div>
+        <div style="font-size:12px">Nomor: <strong>${esc(d.nomor)||"___/___/___"}</strong></div>
+        <div style="font-size:11px;color:#666;margin-top:2px">Jenis: ${tipeLabel}</div>
+        <div style="height:3px;background:linear-gradient(to right,#8b6914,#1a1714);margin:14px auto 0;width:140px;border-radius:2px"></div>
+      </div>
+      <p style="margin-bottom:20px;text-align:justify">Perjanjian ini dibuat dan ditandatangani pada hari ${esc(d.hariTtd||"___")}, tanggal <strong>${esc(d.tanggal)}</strong>, bertempat di <strong>${esc(d.tempat)}</strong>, oleh dan antara:</p>
+      ${pihakHtml}
+      <p style="margin-bottom:8px;text-align:justify">PIHAK PERTAMA dan PIHAK KEDUA secara bersama-sama disebut <strong>"PARA PIHAK"</strong>.</p>
+      ${d.konsideran?`<div style="margin:20px 0;padding:14px 18px;background:#faf9f7;border-left:3px solid #8b6914;border-radius:0 6px 6px 0">
+        <div style="font-size:11px;font-weight:700;color:#8b6914;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Menimbang</div>
+        <p style="text-align:justify;font-size:12.5px">${esc(d.konsideran)}</p>
+      </div>`:""}
+      <p style="margin:20px 0;font-weight:600;text-align:center">Maka berdasarkan hal tersebut di atas, PARA PIHAK sepakat untuk mengadakan Perjanjian Kerjasama dengan ketentuan sebagai berikut:</p>
+      ${pasalHtml}
+      <div style="margin-top:32px;margin-bottom:16px;text-align:justify;font-size:12px">Demikian Perjanjian ini dibuat dalam rangkap 2 (dua) bermaterai cukup, dan masing-masing memiliki kekuatan hukum yang sama, ditandatangani di <strong>${esc(d.tempat)}</strong> pada tanggal <strong>${esc(d.tanggal)}</strong>.</div>
+      <div class="sig-block">
+        ${[["PIHAK PERTAMA",p.p1Perusahaan,p.p1Nama,p.p1Jabatan],["PIHAK KEDUA",p.p2Organisasi,p.p2Nama,p.p2Jabatan]].map(([lbl,org,nm,jbt])=>`
+          <div class="sig-item"><div style="font-weight:600">${lbl}</div><div style="font-size:11.5px;color:#666">${esc(org)}</div><div style="height:72px"></div><div class="sig-line">${esc(nm)}</div><div style="font-size:12px">${esc(jbt)}</div></div>`).join("")}
+      </div>
+    </div>`;
+  const info = document.getElementById("perjanjian-info");
+  if(info) info.textContent = `${d.pasal.length} pasal · ${d.pasal.reduce((s,p)=>s+p.poin.length,0)} poin`;
+}
+
+// ════════════════════════════════════════════════════════
+//  SNAPSHOT / RESTORE
+// ════════════════════════════════════════════════════════
+function takeSnapshot() {
+  const t = state.currentTab;
+  const data = t==="surat"?JSON.parse(JSON.stringify(state.surat)):t==="berita"?JSON.parse(JSON.stringify(state.berita)):t==="perjanjian"?JSON.parse(JSON.stringify(state.perjanjian)):t==="nda"?JSON.parse(JSON.stringify(state.nda)):JSON.parse(JSON.stringify(state.project));
+  const label = `Snapshot ${new Date().toLocaleDateString("id-ID")} ${new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})}`;
+  const snap = {id:uid(), timestamp:new Date().toISOString(), docType:t, data, label};
+  state.snapshots.push(snap);
+  writeLog("SNAPSHOT", t, `Snapshot diambil untuk ${DOC_LABELS[t]||t}`, {snapshot:data, docNum:data?.nomor});
+  persist();
+  notify("Snapshot berhasil disimpan ◉");
+  if(state.currentTab==="history") renderHistory();
+}
+
+function restoreFromSnapshot(snapId) {
+  const snap = state.snapshots.find(s=>s.id===snapId);
+  if(!snap) return;
+  if(!confirm(`Pulihkan data ${DOC_LABELS[snap.docType]||snap.docType} dari snapshot "${snap.label}"? Data saat ini akan diganti.`)) return;
+  const {docType, data} = snap;
+  if(docType==="surat"){ state.surat=JSON.parse(JSON.stringify(data)); prevDocState.surat=JSON.parse(JSON.stringify(data)); }
+  else if(docType==="berita"){ state.berita=JSON.parse(JSON.stringify(data)); prevDocState.berita=JSON.parse(JSON.stringify(data)); }
+  else if(docType==="perjanjian"){ state.perjanjian=JSON.parse(JSON.stringify(data)); prevDocState.perjanjian=JSON.parse(JSON.stringify(data)); }
+  else if(docType==="nda"){ state.nda=JSON.parse(JSON.stringify(data)); prevDocState.nda=JSON.parse(JSON.stringify(data)); }
+  else if(docType==="project"){ state.project=JSON.parse(JSON.stringify(data)); prevDocState.project=JSON.parse(JSON.stringify(data)); }
+  writeLog("RESTORE", docType, `Data dipulihkan dari snapshot`);
+  persist(); notify("Dokumen berhasil dipulihkan ↩");
+  switchTab(docType);
+}
+
+// ════════════════════════════════════════════════════════
+//  HISTORY
+// ════════════════════════════════════════════════════════
+function renderHistory() {
+  renderHistoryStats();
+  renderHistoryFilters();
+  renderHistoryList();
+  renderSnapshotsSidebar();
+}
+
+function renderHistoryStats() {
+  const logs = state.logs;
+  const stats=[
+    {label:"Total Aktivitas",value:logs.length,color:"#1a1714"},
+    {label:"Edit & Buat",value:logs.filter(l=>l.action==="EDIT"||l.action==="CREATE").length,color:"#8b6914"},
+    {label:"Ekspor & Cetak",value:logs.filter(l=>l.action.startsWith("EXPORT")||l.action==="PRINT").length,color:"#1565c0"},
+    {label:"Snapshots",value:logs.filter(l=>l.action==="SNAPSHOT").length,color:"#c62828"},
+  ];
+  document.getElementById("history-stats").innerHTML = stats.map(s=>`
+    <div class="stat-card">
+      <div style="font-size:20px;font-weight:800;color:${s.color};margin-bottom:2px">${s.value}</div>
+      <div style="font-size:11px;color:#9c9289;font-weight:500">${s.label}</div>
+    </div>`).join("");
+}
+
+function renderHistoryFilters() {
+  const filters=[
+    {id:"all",label:"Semua"},
+    {id:"surat",label:"Surat Penawaran"},
+    {id:"berita",label:"Berita Acara"},
+    {id:"perjanjian",label:"Perjanjian"},
+    {id:"project",label:"Setup Proyek"},
+    {id:"snapshots",label:"Snapshots"},
+  ];
+  document.getElementById("history-filters").innerHTML = filters.map(f=>`
+    <button class="filter-tab ${state.logFilter===f.id?'active':''}" onclick="setLogFilter('${f.id}')">${f.label}</button>`).join("");
+}
+
+function setLogFilter(f) { state.logFilter=f; renderHistoryFilters(); renderHistoryList(); }
+
+function renderHistoryList() {
+  const f=state.logFilter;
+  let logs=[...state.logs];
+  if(f==="snapshots") logs=logs.filter(l=>l.action==="SNAPSHOT");
+  else if(f!=="all") logs=logs.filter(l=>l.docType===f);
+
+  if(logs.length===0){ document.getElementById("history-list").innerHTML=`<div style="text-align:center;padding:60px 20px;color:#b0a89e"><div style="font-size:40px;margin-bottom:12px">◌</div><div style="font-weight:600;margin-bottom:4px">Belum ada riwayat</div></div>`; return; }
+
+  // Group by date
+  const grouped={};
+  logs.forEach(log=>{ const day=fmtDate(log.timestamp); if(!grouped[day])grouped[day]=[]; grouped[day].push(log); });
+  const days=Object.keys(grouped).sort((a,b)=>new Date(b)-new Date(a)||0).reverse().sort(()=>-1);
+
+  document.getElementById("history-list").innerHTML = Object.entries(grouped).sort((a,b)=>{ const da=new Date(a[1][0].timestamp), db=new Date(b[1][0].timestamp); return db-da; }).map(([day,dayLogs])=>`
+    <div style="margin-bottom:24px">
+      <div class="day-sep"><span>${day}</span><div class="day-line"></div><span>${dayLogs.length} aktivitas</span></div>
+      ${[...dayLogs].reverse().map(log=>{
+        const cfg=LOG_CFG[log.action]||LOG_CFG.EDIT;
+        const hasChanges=log.changes&&log.changes.length>0;
+        const hasSnap=log.action==="SNAPSHOT"&&log.snapshot;
+        const expandable=hasChanges||hasSnap;
+        return `
+          <div class="log-entry" id="le-${log.id}">
+            <div class="log-entry-header" ${expandable?`onclick="toggleLogDetail('${log.id}')" style="cursor:pointer"`:'style="cursor:default"'}>
+              <div class="log-icon" style="background:${cfg.bg};color:${cfg.color}">${cfg.icon}</div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                  <span style="font-size:13px;font-weight:600">${cfg.label}</span>
+                  <span style="font-size:11px;background:#f0ece4;color:#7a6e63;padding:1px 7px;border-radius:4px;font-weight:500">${DOC_LABELS[log.docType]||log.docType}</span>
+                  ${log.docNum?`<span style="font-size:11px;color:#9c9289">#${esc(log.docNum)}</span>`:""}
+                </div>
+                <div style="font-size:11.5px;color:#7a6e63">${esc(log.summary)}</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:11px;color:#9c9289;margin-bottom:4px">${fmtDatetime(log.timestamp)}</div>
+                <div style="display:flex;gap:6px;justify-content:flex-end">
+                  ${hasSnap?`<button onclick="event.stopPropagation();restoreFromLogSnapshot('${log.id}')" style="font-size:11px;color:#2e7d52;background:#e8f5ee;border:none;border-radius:5px;padding:3px 9px;font-weight:600;cursor:pointer;font-family:inherit">↩ Pulihkan</button>`:""}
+                  <button onclick="event.stopPropagation();deleteLog('${log.id}')" style="font-size:11px;color:#999;background:none;border:none;cursor:pointer;padding:3px 6px;font-family:inherit">✕</button>
+                  ${expandable?`<span style="font-size:11px;color:#aaa" id="la-${log.id}">▼</span>`:""}
+                </div>
+              </div>
+            </div>
+            ${expandable?`
+            <div class="log-detail" id="ld-${log.id}">
+              ${hasChanges?`
+                <div style="font-size:11px;font-weight:700;color:#8b6914;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Perubahan Field</div>
+                <div>${log.changes.map(c=>`
+                  <div style="display:flex;gap:8px;font-size:12px;align-items:baseline;margin-bottom:4px">
+                    <span style="color:#9c9289;min-width:120px;font-weight:500">${esc(c.field)}</span>
+                    <span class="change-pill" style="background:#fdecea;color:#c0392b">${esc(String(c.from||"").slice(0,40)||"—")}</span>
+                    <span style="color:#666">→</span>
+                    <span class="change-pill" style="background:#e8f5ee;color:#2e7d52">${esc(String(c.to||"").slice(0,40)||"—")}</span>
+                  </div>`).join("")}</div>`:""}
+              ${hasSnap?`
+                <div style="font-size:11px;font-weight:700;color:#8b6914;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Data Snapshot</div>
+                <pre style="font-size:11px;color:#5c5548;background:#f0ece4;padding:10px;border-radius:6px;overflow:auto;max-height:160px;line-height:1.6;white-space:pre-wrap">${esc(JSON.stringify(log.snapshot,null,2).slice(0,600)+(JSON.stringify(log.snapshot,null,2).length>600?"\n...":""))}</pre>`:""}
+            </div>`:""}
+          </div>`;}).join("")}
+    </div>`).join("");
+}
+
+function toggleLogDetail(id) {
+  const d=document.getElementById("ld-"+id), a=document.getElementById("la-"+id);
+  if(!d) return;
+  const open=d.classList.toggle("open");
+  if(a) a.textContent=open?"▲":"▼";
+}
+
+function restoreFromLogSnapshot(logId) {
+  const log = state.logs.find(l=>l.id===logId);
+  if(!log||!log.snapshot) return;
+  if(!confirm("Pulihkan dari snapshot ini? Data saat ini akan diganti.")) return;
+  const {docType,snapshot} = log;
+  if(docType==="surat"){ state.surat=JSON.parse(JSON.stringify(snapshot)); prevDocState.surat=JSON.parse(JSON.stringify(snapshot)); }
+  else if(docType==="berita"){ state.berita=JSON.parse(JSON.stringify(snapshot)); prevDocState.berita=JSON.parse(JSON.stringify(snapshot)); }
+  else if(docType==="perjanjian"){ state.perjanjian=JSON.parse(JSON.stringify(snapshot)); prevDocState.perjanjian=JSON.parse(JSON.stringify(snapshot)); }
+  else if(docType==="nda"){ state.nda=JSON.parse(JSON.stringify(snapshot)); prevDocState.nda=JSON.parse(JSON.stringify(snapshot)); }
+  else if(docType==="project"){ state.project=JSON.parse(JSON.stringify(snapshot)); prevDocState.project=JSON.parse(JSON.stringify(snapshot)); }
+  writeLog("RESTORE", docType, "Data dipulihkan dari snapshot log");
+  persist(); notify("Dokumen berhasil dipulihkan ↩");
+  switchTab(docType);
+}
+
+function deleteLog(id) { state.logs=state.logs.filter(l=>l.id!==id); persist(); updateBadge(); renderHistory(); }
+function clearAllLogs() { if(!confirm("Hapus semua riwayat? Tindakan ini tidak bisa dibatalkan.")) return; state.logs=[]; persist(); updateBadge(); renderHistory(); notify("Semua riwayat dihapus"); }
+
+function renderSnapshotsSidebar() {
+  const snaps = [...state.snapshots].reverse();
+  if(snaps.length===0){
+    document.getElementById("snapshots-list").innerHTML=`<div style="text-align:center;padding:24px 10px;color:#b0a89e;font-size:12px"><div style="font-size:28px;margin-bottom:8px">◉</div>Belum ada snapshot.<br>Klik "Snapshot" pada tab dokumen.</div>`;
+    return;
+  }
+  document.getElementById("snapshots-list").innerHTML = snaps.map(snap=>`
+    <div class="snap-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div>
+          <div style="font-size:12px;font-weight:700">${esc(snap.label||"Snapshot")}</div>
+          <div style="font-size:10.5px;color:#9c9289;margin-top:1px">${fmtDatetime(snap.timestamp)}</div>
+        </div>
+        <div style="font-size:10px;background:#f0e8d5;color:#8b6914;padding:2px 7px;border-radius:4px;font-weight:600">${DOC_LABELS[snap.docType]||snap.docType}</div>
+      </div>
+      <div style="font-size:11px;color:#7a6e63;margin-bottom:8px">
+        ${snap.docType==="perjanjian"?`${snap.data?.tipe==="jasa"?"Jasa":"Barang"} · ${snap.data?.pasal?.length||0} pasal`:snap.docType==="surat"?`Nomor: ${snap.data?.nomor||"—"} · ${snap.data?.items?.length||0} item`:snap.docType==="berita"?`Nomor: ${snap.data?.nomor||"—"} · ${snap.data?.items?.length||0} barang`:snap.docType==="nda"?`Nomor: ${snap.data?.nomor||"—"} · ${snap.data?.pnNama||"—"}`:""}
+      </div>
+      <button onclick="restoreFromSnapshot('${snap.id}')" style="width:100%;background:#1a1714;color:#fff;border:none;border-radius:6px;padding:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">↩ Pulihkan</button>
+    </div>`).join("");
+}
+
+// ════════════════════════════════════════════════════════
+//  EXPORT
+// ════════════════════════════════════════════════════════
+function getPreviewHTML() {
+  const t=state.currentTab;
+  const elId = {surat:"doc-preview-surat",berita:"doc-preview-berita",perjanjian:"doc-preview-perjanjian"}[t];
+  return elId ? document.getElementById(elId)?.innerHTML || "" : "";
+}
+
+function saveHTML() {
+  const t=state.currentTab;
+  const title={surat:"Surat_Penawaran",berita:"Berita_Acara_Serah_Terima",perjanjian:"Perjanjian_Kerjasama"}[t]||"Dokumen";
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>${title}</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>body{font-family:'Plus Jakarta Sans',sans-serif;max-width:860px;margin:40px auto;padding:40px;color:#111;line-height:1.75;font-size:12.5px}table{border-collapse:collapse;width:100%}@media print{body{margin:0;padding:20mm}-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
+</head><body>${getPreviewHTML()}</body></html>`;
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([html],{type:"text/html"})); a.download=title+".html"; a.click();
+  writeLog("EXPORT_HTML",t,`File HTML diunduh: ${title}.html`);
+  notify("File HTML berhasil disimpan");
+}
+
+function saveJSON() {
+  const data={metadata:{exportedAt:new Date().toISOString(),version:"2.0"},project:state.project,suratPenawaran:state.surat,beritaAcara:state.berita,perjanjianKerjasama:state.perjanjian};
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"})); a.download="data_pengadaan.json"; a.click();
+  writeLog("EXPORT_JSON",state.currentTab,"Semua data diekspor ke JSON");
+  notify("Data JSON berhasil diekspor");
+}
+
+function copyJSON() {
+  const data={project:state.project,suratPenawaran:state.surat,beritaAcara:state.berita,perjanjianKerjasama:state.perjanjian};
+  navigator.clipboard?.writeText(JSON.stringify(data,null,2)).then(()=>notify("JSON disalin ke clipboard"));
+}
+
+function printDoc() {
+  writeLog("PRINT",state.currentTab,"Dokumen dicetak");
+  notify("Membuka dialog cetak...");
+  const prev = document.title;
+  document.title = " ";
+  window.onafterprint = () => { document.title = prev; };
+  setTimeout(()=>window.print(),300);
+}
+
+function savePDF() {
+  writeLog("EXPORT_PDF",state.currentTab,"Ekspor PDF dimulai");
+  notify("Pilih 'Save as PDF' pada dialog print");
+  const prev = document.title;
+  document.title = " ";
+  window.onafterprint = () => { document.title = prev; };
+  setTimeout(()=>window.print(),400);
+}
+
+function handleLogoUpload(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.logo = e.target.result;
+    persist();
+    renderDocSurat();
+    renderDocBerita();
+    renderLogoPreview();
+    notify("Logo berhasil diunggah ✓");
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeLogo() {
+  state.logo = null;
+  persist();
+  renderDocSurat();
+  renderDocBerita();
+  renderLogoPreview();
+  notify("Logo dihapus");
+}
+
+function renderLogoPreview() {
+  ["surat","berita"].forEach(tab => {
+    const el = document.getElementById("logo-preview-"+tab);
+    if(!el) return;
+    if(state.logo) {
+      el.innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#f5ead8;border:1px solid #e8dcc8;border-radius:8px">
+        <img src="${state.logo}" style="height:40px;max-width:100px;object-fit:contain;border-radius:4px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-weight:700;color:#2e7d52">Logo aktif</div>
+          <div style="font-size:10.5px;color:#7a6e63">Tampil di kanan atas surat</div>
+        </div>
+        <button onclick="removeLogo()" style="background:none;border:none;color:#c0392b;font-size:18px;cursor:pointer;flex-shrink:0;font-family:inherit">×</button>
+      </div>`;
+    } else {
+      el.innerHTML = `<label style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;border:2px dashed #ddd8d0;border-radius:8px;cursor:pointer;background:#faf9f7;transition:border-color .15s" onmouseover="this.style.borderColor='#8b6914'" onmouseout="this.style.borderColor='#ddd8d0'">
+        <span style="font-size:22px">🖼</span>
+        <span style="font-size:12px;font-weight:600;color:#7a6e63">Klik untuk unggah logo</span>
+        <span style="font-size:10.5px;color:#b0a89e">PNG, JPG, SVG — maks. 2MB</span>
+        <input type="file" accept="image/*" onchange="handleLogoUpload(this)" style="display:none">
+      </label>`;
+    }
+  });
+}
+
+function exportLog() {
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify({logs:state.logs,snapshots:state.snapshots,exportedAt:new Date().toISOString()},null,2)],{type:"application/json"}));
+  a.download="kimu_activity_log.json"; a.click();
+  notify("Log aktivitas diekspor");
+}
+
+// ════════════════════════════════════════════════════════
+//  NDA FORM & RENDERER
+// ════════════════════════════════════════════════════════
+function renderNdaForm() {
+  document.getElementById("form-header-nda").innerHTML = renderFormHeader("nda");
+  const d = state.nda, p = state.project;
+  document.getElementById("nda-form-container").innerHTML = `
+    <div style="font-size:11px;background:#e3f0fb;color:#1565c0;padding:8px 12px;border-radius:7px;border:1px solid #bbdefb;margin-bottom:14px;line-height:1.6">
+      🔒 <strong>Dasar Hukum:</strong> UU No. 30 Tahun 2000 (Rahasia Dagang) · Pasal 1320 KUHPerdata<br>
+      Pihak Pengungkap otomatis dari <strong>Setup Proyek (Pihak Pertama)</strong>.
+    </div>
+    <div class="sep"><span>Identitas Dokumen</span><hr></div>
+    <div class="row">
+      <div class="fl half"><label>Nomor NDA</label><input value="${esc(d.nomor)}" placeholder="NDA-001/..." oninput="updateNda('nomor',this.value)"></div>
+      <div class="fl half"><label>Tanggal</label><input value="${esc(d.tanggal)}" oninput="updateNda('tanggal',this.value)"></div>
+    </div>
+    <div class="row">
+      <div class="fl half"><label>Hari</label><input value="${esc(d.hari)}" placeholder="Senin" oninput="updateNda('hari',this.value)"></div>
+      <div class="fl half"><label>Tempat</label><input value="${esc(d.tempat)}" oninput="updateNda('tempat',this.value)"></div>
+    </div>
+    <div class="sep"><span>Pihak Penerima (Receiving Party)</span><hr></div>
+    <div class="fl"><label>Nama Lengkap</label><input value="${esc(d.pnNama)}" placeholder="Nama perorangan / perwakilan" oninput="updateNda('pnNama',this.value)"></div>
+    <div class="fl"><label>No. KTP</label><input value="${esc(d.pnKtp)}" placeholder="Nomor KTP" oninput="updateNda('pnKtp',this.value)"></div>
+    <div class="fl"><label>Alamat</label><textarea rows="2" oninput="updateNda('pnAlamat',this.value)">${esc(d.pnAlamat)}</textarea></div>
+    <div class="row">
+      <div class="fl half"><label>Jabatan</label><input value="${esc(d.pnJabatan)}" placeholder="Jabatan" oninput="updateNda('pnJabatan',this.value)"></div>
+      <div class="fl half"><label>Organisasi / Perusahaan</label><input value="${esc(d.pnOrganisasi)}" oninput="updateNda('pnOrganisasi',this.value)"></div>
+    </div>
+    <div class="row">
+      <div class="fl half"><label>Nomor Kontrak / SPK</label><input value="${esc(d.pnNomorKontrak)}" oninput="updateNda('pnNomorKontrak',this.value)"></div>
+      <div class="fl half"><label>Tanggal Kontrak / SPK</label><input value="${esc(d.pnTanggalKontrak)}" oninput="updateNda('pnTanggalKontrak',this.value)"></div>
+    </div>
+    <div class="sep"><span>Pihak Pengungkap (Disclosing Party)</span><hr></div>
+    <div style="background:#f9f7f4;border:1px solid #e2ddd6;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#5c5548;line-height:1.8">
+      <div><strong>${esc(p.p1Nama)}</strong> · ${esc(p.p1Jabatan)}</div>
+      <div>${esc(p.p1Perusahaan)}</div>
+      <div style="color:#9c9289;font-size:11px">${esc(p.p1Alamat)}</div>
+      <button onclick="switchTab('project')" style="background:none;border:none;color:#8b6914;cursor:pointer;font-size:11px;font-weight:600;padding:4px 0 0;font-family:inherit">Ubah di Setup Proyek ↗</button>
+    </div>
+    <div class="sep"><span>Konteks & Isi NDA</span><hr></div>
+    <div class="fl"><label>Konteks Pelaksanaan</label><textarea rows="2" placeholder="Contoh: penyusunan sistem informasi manajemen..." oninput="updateNda('konteksPelaksanaan',this.value)">${esc(d.konteksPelaksanaan)}</textarea></div>
+    <div class="fl"><label>Jenis Dukungan / Kerjasama</label><textarea rows="2" placeholder="Contoh: konsultasi teknis dan pendampingan..." oninput="updateNda('jenisDukungan',this.value)">${esc(d.jenisDukungan)}</textarea></div>
+    <div class="fl"><label>Objek / Ruang Lingkup Kegiatan</label><textarea rows="2" placeholder="Contoh: pengelolaan aset dan keuangan Yayasan..." oninput="updateNda('objekKegiatan',this.value)">${esc(d.objekKegiatan)}</textarea></div>
+    <div class="fl"><label>Objek Informasi Rahasia</label><textarea rows="2" placeholder="Contoh: data keuangan, struktur organisasi, sistem IT..." oninput="updateNda('objekInformasi',this.value)">${esc(d.objekInformasi)}</textarea></div>
+    <div class="fl"><label>Jangka Waktu Kerahasiaan</label><input value="${esc(d.jangkaWaktu)}" placeholder="Contoh: 2 (dua) tahun" oninput="updateNda('jangkaWaktu',this.value)"></div>`;
+}
+
+function updateNda(k, v) {
+  const prev = prevDocState.nda || JSON.parse(JSON.stringify(state.nda));
+  state.nda[k] = v; persist(); updateStatusDots();
+  scheduleEditLog("nda", ()=>state.nda, ()=>prevDocState.nda||prev, v=>prevDocState.nda=v);
+  renderDocNda();
+}
+
+function renderDocNda() {
+  const d = state.nda, p = state.project;
+  const pengungkap = p.p1Perusahaan || p.p1Nama || "[Pihak Pengungkap]";
+  const pengungkapWakil = p.p1Nama || "[]";
+  const pengungkapJabatan = p.p1Jabatan || "[]";
+  const pengungkapAlamat = p.p1Alamat || "[]";
+
+  const pnNama = d.pnNama || "ORANG A";
+  const pnKtp  = d.pnKtp  || "[]";
+  const pnAlamat = d.pnAlamat || "[Alamat]";
+  const pnJabatan = d.pnJabatan || "[]";
+  const pnOrganisasi = d.pnOrganisasi || "[]";
+  const pnKontrak = d.pnNomorKontrak || "[]";
+  const pnTglKontrak = d.pnTanggalKontrak || "[]";
+
+  const konteks = d.konteksPelaksanaan || "[]";
+  const jenisDukungan = d.jenisDukungan || "[]";
+  const objekKegiatan = d.objekKegiatan || "[]";
+  const objekInfo = d.objekInformasi || "[]";
+  const jangka = d.jangkaWaktu || "2 (dua) tahun";
+
+  const paraStyle = "margin-bottom:14px;text-align:justify;font-size:12.5px;line-height:1.85";
+  const pasalJudul = (n, j) => `
+    <div style="text-align:center;font-weight:700;font-size:13px;margin-top:22px;margin-bottom:2px">Pasal ${n}</div>
+    <div style="text-align:center;font-weight:700;font-size:12.5px;text-transform:uppercase;margin-bottom:10px;letter-spacing:.03em">${j}</div>`;
+
+  document.getElementById("doc-preview-nda").innerHTML = `
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;line-height:1.85;color:#111;position:relative">
+      ${state.logo ? `<img src="${state.logo}" style="position:absolute;top:0;right:0;max-height:72px;max-width:150px;object-fit:contain;z-index:0">` : `<div class="no-print" style="position:absolute;top:0;right:0;width:110px;height:50px;border:1.5px dashed #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#ccc;text-align:center;line-height:1.3;z-index:0">Logo<br>Perusahaan</div>`}
+      <div style="position:relative;z-index:1">
+
+      <!-- JUDUL -->
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px">Pernyataan Kerahasiaan</div>
+        <div style="font-size:12px;color:#555;margin-bottom:2px">(<em>Non-Disclosure Agreement</em>)</div>
+        <div style="font-size:12px">Nomor: <strong>${esc(d.nomor)||"_______________"}</strong></div>
+        <div style="height:3px;background:linear-gradient(to right,#8b6914,#1a1714);margin:12px auto 0;width:120px;border-radius:2px"></div>
+      </div>
+
+      <!-- PEMBUKAAN -->
+      <p style="${paraStyle}"><strong>PERNYATAAN KERAHASIAAN</strong> <em>("Pernyataan")</em> ini dibuat dan ditandatangani pada hari ini, <strong>${esc(d.hari)}</strong>, tanggal <strong>${esc(d.tanggal)}</strong>, bertempat di <strong>${esc(d.tempat)}</strong>, oleh:</p>
+
+      <!-- PIHAK PENERIMA -->
+      <div style="margin-bottom:18px;padding-left:16px">
+        <table style="width:100%;font-size:12.5px;line-height:1.85"><tbody>
+          <tr><td style="width:26px;font-weight:700;vertical-align:top">I.</td><td style="width:160px;vertical-align:top">Nama</td><td style="width:14px;text-align:center;vertical-align:top">:</td><td style="vertical-align:top"><strong>${esc(pnNama)}</strong></td></tr>
+          <tr><td></td><td style="vertical-align:top">No. KTP</td><td style="text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(pnKtp)}</td></tr>
+          <tr><td></td><td style="vertical-align:top">Alamat</td><td style="text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(pnAlamat)}</td></tr>
+          <tr><td></td><td style="vertical-align:top">Jabatan</td><td style="text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(pnJabatan)} pada ${esc(pnOrganisasi)}</td></tr>
+          <tr><td></td><td style="vertical-align:top">No. Kontrak / SPK</td><td style="text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(pnKontrak)} tertanggal ${esc(pnTglKontrak)}</td></tr>
+        </tbody></table>
+        <div style="padding-left:26px;margin-top:6px;font-style:italic">Selanjutnya disebut sebagai <strong>"Pihak Penerima"</strong>.</div>
+      </div>
+
+      <p style="${paraStyle}">dengan ini menyatakan kepada:</p>
+
+      <!-- PIHAK PENGUNGKAP -->
+      <div style="margin-bottom:18px;padding-left:16px">
+        <table style="width:100%;font-size:12.5px;line-height:1.85"><tbody>
+          <tr><td style="width:26px;font-weight:700;vertical-align:top">II.</td><td style="width:160px;vertical-align:top">Nama Perusahaan</td><td style="width:14px;text-align:center;vertical-align:top">:</td><td style="vertical-align:top"><strong>${esc(pengungkap)}</strong></td></tr>
+          <tr><td></td><td style="vertical-align:top">Diwakili oleh</td><td style="text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(pengungkapWakil)} selaku ${esc(pengungkapJabatan)}</td></tr>
+          <tr><td></td><td style="vertical-align:top">Alamat</td><td style="text-align:center;vertical-align:top">:</td><td style="vertical-align:top">${esc(pengungkapAlamat)}</td></tr>
+        </tbody></table>
+        <div style="padding-left:26px;margin-top:6px;font-style:italic">Selanjutnya disebut sebagai <strong>"Pihak Pengungkap"</strong>.</div>
+      </div>
+
+      <p style="${paraStyle}">Pihak Penerima dan Pihak Pengungkap untuk selanjutnya, secara bersama-sama disebut sebagai <strong>"Para Pihak"</strong> dan masing-masing sebagai <strong>"Pihak"</strong>.</p>
+
+      <!-- KONSIDERAN -->
+      <p style="${paraStyle}">Pihak Penerima pertama-tama menjelaskan sebagai berikut:</p>
+      <div style="margin-bottom:18px;padding-left:16px">
+        <p style="${paraStyle}"><strong>BAHWA</strong>, dalam melaksanakan ${esc(konteks)}, Pihak Pengungkap memerlukan dukungan Pihak Penerima dalam suatu ${esc(jenisDukungan)} yang akan membantu dan mendampingi Pihak Pengungkap dalam menjalankan ${esc(objekKegiatan)}.</p>
+        <p style="${paraStyle}"><strong>BAHWA</strong>, Pihak Penerima akan menerima seluruh informasi yang berkaitan dengan ${esc(objekInfo)} dari Pihak Pengungkap dan akan menganalisisnya sebagai bentuk dari proses pendampingan.</p>
+        <p style="${paraStyle}"><strong>BAHWA</strong>, Pihak Penerima setuju dan menegaskan bahwa ia akan menerima seluruh informasi tersebut yang diberikan oleh Pihak Pengungkap secara rahasia sebagaimana diatur dalam Pernyataan ini.</p>
+      </div>
+
+      <p style="${paraStyle}"><strong>DENGAN DEMIKIAN</strong>, berdasarkan pertimbangan-pertimbangan sebagaimana disebutkan di atas, Pihak Penerima setuju untuk mengikatkan diri terhadap syarat-syarat dan ketentuan-ketentuan sebagaimana berikut, sesuai dengan ketentuan Pasal 1320 KUHPerdata tentang syarat sahnya perjanjian:</p>
+
+      <!-- PASAL 1 -->
+      <div class="doc-pasal-block">
+        ${pasalJudul(1,"Informasi Rahasia")}
+        <ol style="padding-left:24px;line-height:2">
+          <li style="${paraStyle}">"<strong>Informasi Rahasia</strong>" adalah seluruh dokumentasi, data, strategi, sistem teknologi informasi, dan informasi lainnya yang terkait dengan ${esc(objekInfo)}, yang dilindungi berdasarkan Undang-Undang Nomor 30 Tahun 2000 tentang Rahasia Dagang.</li>
+          <li style="${paraStyle}">Tunduk pada Hukum Yang Berlaku, Pihak Penerima setuju untuk tidak mengungkapkan secara tidak perlu dan harus mengambil semua tindakan yang diperlukan untuk melindungi dan menghindari pengungkapan yang tidak perlu atau penyalahgunaan Informasi Rahasia yang disediakan oleh Pihak Pengungkap sebagai bagian dari proses pendampingan.</li>
+          <li style="${paraStyle}">Pihak Penerima setuju bahwa Informasi Rahasia yang diberikan padanya akan dipegang sesuai dengan Hukum Yang Berlaku dan tidak akan digunakan untuk tujuan apapun selain tujuan yang dimaksud dalam Pernyataan ini. Kewajiban kerahasiaan ini berlaku selama <strong>${esc(jangka)}</strong> sejak tanggal ditandatanganinya Pernyataan ini.</li>
+        </ol>
+      </div>
+
+      <!-- PASAL 2 -->
+      <div class="doc-pasal-block">
+        ${pasalJudul(2,"Informasi Bukan Rahasia")}
+        <p style="${paraStyle}">Meskipun demikian, hal-hal berikut ini tidak akan menjadi Informasi Rahasia untuk tujuan Pernyataan ini:</p>
+        <ol style="padding-left:24px;line-height:2" type="a">
+          <li style="${paraStyle}">Informasi yang umumnya tersedia untuk umum selain sebagai hasil pengungkapan oleh Pihak Penerima dalam pelanggaran kewajiban yang dibebankan oleh Pernyataan ini atau kewajiban kerahasiaan lainnya yang berkaitan dengan Informasi Rahasia;</li>
+          <li style="${paraStyle}">Informasi yang tersedia bagi Pihak Penerima secara tidak rahasia sebelum pengungkapan informasi tersebut kepada Pihak Penerima oleh Pihak Pengungkap; atau</li>
+          <li style="${paraStyle}">Informasi yang diterima oleh Pihak Penerima dari pihak ketiga yang tidak memiliki kewajiban kerahasiaan kepada Pihak Pengungkap.</li>
+        </ol>
+      </div>
+
+      <!-- PASAL 3 -->
+      <div class="doc-pasal-block">
+        ${pasalJudul(3,"Kewajiban Pihak Penerima")}
+        <ol style="padding-left:24px;line-height:2">
+          <li style="${paraStyle}">Pihak Penerima dengan ini berjanji dan setuju bahwa ia akan menggunakan informasi dan dokumen yang diterima dari Pihak Pengungkap semata-mata untuk tujuan proses pendampingan dan hanya akan mereproduksi dokumen-dokumen tersebut sebagaimana sewajarnya dianggap perlu untuk tujuan tersebut.</li>
+          <li style="${paraStyle}">Jika Pihak Penerima atau Perwakilannya diwajibkan oleh hukum untuk memberikan Informasi Rahasia milik Pihak Pengungkap, Pihak Penerima sejauh ia mampu harus memberitahukan dan berkonsultasi dengan Pihak Pengungkap atas fakta tersebut dan harus menggunakan upaya yang wajar untuk membatasi pengungkapan Informasi Rahasia yang harus disediakan.</li>
+          <li style="${paraStyle}">Pihak Penerima dapat berbagi Informasi Rahasia yang diterima dengan penasihat profesionalnya yang terlibat untuk membantu sehubungan dengan pekerjaan dan akan memberi tahu penasihatnya tentang ketentuan Pernyataan ini.</li>
+          <li style="${paraStyle}">Jika Pihak Penerima atau Perwakilannya melakukan penyalahgunaan Informasi Rahasia yang diterima dari Pihak Pengungkap, bersedia untuk menerima sanksi administratif dan/atau pidana sesuai dengan ketentuan perundang-undangan yang berlaku, termasuk namun tidak terbatas pada ketentuan Pasal 17 ayat (1) Undang-Undang Nomor 30 Tahun 2000 tentang Rahasia Dagang.</li>
+        </ol>
+      </div>
+
+      <!-- PASAL 4 -->
+      <div class="doc-pasal-block">
+        ${pasalJudul(4,"Ketentuan Lain-Lain")}
+        <ol style="padding-left:24px;line-height:2">
+          <li style="${paraStyle}">Judul dalam Pernyataan ini hanya untuk kenyamanan dan tidak berpengaruh terhadap interpretasi di dalamnya.</li>
+          <li style="${paraStyle}">Pernyataan ini mengikat Pihak Penerima di sini dan para penerima serta penerusnya masing-masing.</li>
+          <li style="${paraStyle}">Tidak ada Pihak yang dianggap telah mengenyampingkan setiap hak berdasarkan Pernyataan ini, kecuali Pihak tersebut menyampaikan kepada Pihak lain pengenyampingan tertulis yang ditandatangani oleh pejabat yang berwenang dari Pihak yang mengenyampingkan.</li>
+          <li style="${paraStyle}">Dalam hal ketentuan apapun dalam Pernyataan ini akan ditafsirkan ilegal atau tidak sah karena alasan apapun, ketentuan tersebut tidak akan mempengaruhi ketentuan lainnya, dan Pernyataan ini akan ditafsirkan seolah-olah ketentuan ilegal atau tidak sah tersebut tidak pernah menjadi bagian dari Pernyataan ini.</li>
+          <li style="${paraStyle}">Pernyataan ini dibuat dan berlaku dalam versi Bahasa Indonesia dan tunduk pada hukum Negara Republik Indonesia, khususnya Undang-Undang Nomor 30 Tahun 2000 tentang Rahasia Dagang dan Pasal 1320 KUHPerdata.</li>
+        </ol>
+      </div>
+
+      <!-- PENUTUP -->
+      <div style="margin-top:28px;margin-bottom:10px;padding:12px 16px;background:#faf9f7;border-left:3px solid #8b6914;border-radius:0 6px 6px 0;font-size:12px;color:#5c5548">
+        <strong>Lembar Penandatanganan</strong><br>
+        Dengan Demikian, Pihak Penerima (atau wakilnya yang sah) dengan ini menandatangani Pernyataan Kerahasiaan ini pada tanggal yang dinyatakan pada permulaan Pernyataan ini.
+      </div>
+
+      <!-- TANDA TANGAN -->
+      <div style="margin-top:36px;display:flex;justify-content:space-between">
+        <div style="text-align:center;min-width:220px">
+          <div style="font-weight:700;margin-bottom:4px">Pihak Penerima</div>
+          <div style="font-size:11.5px;color:#666;margin-bottom:72px">${esc(pnOrganisasi)}</div>
+          <div style="border-bottom:1.5px solid #222;padding-bottom:2px;font-weight:700;text-decoration:underline;display:inline-block;min-width:180px">${esc(pnNama)}</div>
+          <div style="font-size:12px;margin-top:2px">${esc(pnJabatan)}</div>
+        </div>
+        <div style="text-align:center;min-width:220px">
+          <div style="font-weight:700;margin-bottom:4px">Pihak Pengungkap</div>
+          <div style="font-size:11.5px;color:#666;margin-bottom:72px">${esc(pengungkap)}</div>
+          <div style="border-bottom:1.5px solid #222;padding-bottom:2px;font-weight:700;text-decoration:underline;display:inline-block;min-width:180px">${esc(pengungkapWakil)}</div>
+          <div style="font-size:12px;margin-top:2px">${esc(pengungkapJabatan)}</div>
+        </div>
+      </div>
+
+      <!-- FOOTER HUKUM -->
+      <div style="margin-top:36px;padding-top:14px;border-top:1px solid #e2ddd6;font-size:10.5px;color:#9c9289;text-align:center;line-height:1.7">
+        Dokumen ini dilindungi oleh Undang-Undang Nomor 30 Tahun 2000 tentang Rahasia Dagang.<br>
+        Keabsahan perjanjian ini mengacu pada Pasal 1320 KUHPerdata (syarat sah perjanjian).<br>
+        Pelanggaran terhadap pernyataan ini dapat dikenakan sanksi pidana sesuai Pasal 17 ayat (1) UU No. 30 Tahun 2000.
+      </div>
+
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════════════════════════
+(function init() {
+  loadPersisted();
+  prevDocState.project = JSON.parse(JSON.stringify(state.project));
+  prevDocState.surat   = JSON.parse(JSON.stringify(state.surat));
+  prevDocState.berita  = JSON.parse(JSON.stringify(state.berita));
+  prevDocState.perjanjian = JSON.parse(JSON.stringify(state.perjanjian));
+  prevDocState.nda = JSON.parse(JSON.stringify(state.nda));
+  switchTab("project");
+  updateBadge();
+  updateStatusDots();
+})();
+</script>
+</body>
+</html>

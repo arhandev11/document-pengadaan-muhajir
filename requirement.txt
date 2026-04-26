@@ -1,0 +1,1119 @@
+================================================================================
+  PRODUCT REQUIREMENTS DOCUMENT (PRD)
+  Doc Manager — Document Management System untuk Dokumen Pengadaan
+  Sumber: Doc Manager.html (single-file web application)
+  Dokumen disusun: 22 April 2026
+================================================================================
+
+--------------------------------------------------------------------------------
+1. RINGKASAN PRODUK
+--------------------------------------------------------------------------------
+Doc Manager adalah aplikasi web berbasis browser (single-page, single-file HTML)
+untuk membuat, mengedit, dan menyimpan dokumen pengadaan dalam Bahasa Indonesia.
+Aplikasi tidak memerlukan backend — seluruh data dipersistensi di localStorage
+browser pengguna. Sistem difokuskan pada alur kerja pengadaan barang/jasa yang
+berulang, sehingga data pihak cukup diisi sekali dan dipakai ulang pada semua
+dokumen turunan.
+
+Branding tampilan: logo "K" dengan warna primer emas gelap (#8b6914). Dokumen
+ditata seperti kertas A4 dengan font Plus Jakarta Sans untuk isi dan Cormorant
+Garamond untuk judul.
+
+--------------------------------------------------------------------------------
+2. TUJUAN PRODUK
+--------------------------------------------------------------------------------
+T1. Memungkinkan tim pengadaan menyusun lima jenis dokumen standar tanpa
+    menduplikasi data identitas pihak.
+T2. Menghasilkan dokumen siap cetak (A4) dengan tata letak konsisten.
+T3. Menyediakan jejak audit (riwayat perubahan + snapshot) untuk kebutuhan
+    pertanggungjawaban internal.
+T4. Bekerja 100% offline setelah halaman dimuat pertama kali.
+T5. Memungkinkan ekspor dokumen ke PDF (via dialog Print), HTML, dan JSON
+    untuk integrasi/arsip.
+
+--------------------------------------------------------------------------------
+3. TARGET PENGGUNA
+--------------------------------------------------------------------------------
+- Tim Pengadaan / Procurement di yayasan, perusahaan kecil–menengah.
+- Sekretariat / Admin yang menyiapkan dokumen rutin (SPK, BAST, PKS, NDA).
+- Pengguna non-teknis; asumsi: bisa mengetik, tidak perlu memahami JSON atau
+  localStorage.
+
+--------------------------------------------------------------------------------
+4. RUANG LINGKUP — JENIS DOKUMEN YANG DIDUKUNG
+--------------------------------------------------------------------------------
+D1. Setup Proyek (data pihak bersama, bukan dokumen output)
+D2. Surat Penawaran Harga
+D3. Berita Acara Serah Terima (BAST)
+D4. Perjanjian Kerjasama
+    - Sub-tipe: Pengadaan Barang
+    - Sub-tipe: Pengadaan Jasa
+D5. Pernyataan Kerahasiaan / Non-Disclosure Agreement (NDA)
+D6. Riwayat (read-only, bukan dokumen output)
+
+--------------------------------------------------------------------------------
+5. ARSITEKTUR INFORMASI & NAVIGASI
+--------------------------------------------------------------------------------
+5.1 Topbar (selalu tampak)
+    - Logo "K" + nama aplikasi "Doc Manager".
+    - Area aksi kontekstual (muncul hanya di tab dokumen):
+        * Snapshot
+        * Simpan PDF / HTML / JSON
+        * Copy JSON ke clipboard
+        * Print
+
+5.2 Tab Bar (navigasi utama, horizontal scroll bila sempit)
+    Urutan tab:
+      [⚙ Setup Proyek] [📄 Surat Penawaran] [📋 Berita Acara]
+      [📝 Perjanjian Kerjasama] [🔒 NDA] [🕒 Riwayat]
+    Di kanan tab bar terdapat STATUS DOT untuk tiap dokumen:
+      - Abu-abu (#ddd8d0): dokumen belum punya nomor / belum siap.
+      - Hijau (#27ae60): dokumen sudah memiliki nomor (indikator minimum
+        kesiapan).
+    Badge angka muncul di tab Riwayat jika ada >0 log dalam 1 jam terakhir.
+
+5.3 Layout Halaman Dokumen
+    Split pane horizontal:
+      - Kiri (400–420px): Panel form input.
+      - Kanan (flex): Panel preview dokumen (background krem, paper A4 putih).
+    Panel form berisi:
+      - Header form: judul dokumen + shortcut link ke Setup Proyek & Riwayat.
+      - Bagian-bagian terpisah (separator berlabel).
+      - Section "Logo Kop Surat" untuk tab Surat & Berita.
+
+--------------------------------------------------------------------------------
+6. KEBUTUHAN FUNGSIONAL PER MODUL
+--------------------------------------------------------------------------------
+
+6.1 MODUL: SETUP PROYEK
+    Tujuan: Sumber tunggal (single source of truth) untuk identitas pihak.
+    Field input:
+      - Pihak Pertama (Penyedia):
+          * Nama, Jabatan
+          * Nama Perusahaan
+          * Alamat (textarea)
+      - Pihak Kedua (Penerima):
+          * Nama, Jabatan
+          * Nama Organisasi
+          * Alamat (textarea)
+      - Data SPK:
+          * Nomor SPK
+          * Tanggal SPK
+    Perilaku:
+      - Semua perubahan otomatis tersimpan (localStorage).
+      - Bila sedang berada di tab dokumen lain, preview diperbarui real-time.
+      - Tersedia tombol navigasi cepat ke tab dokumen & tombol "Snapshot Setup".
+
+6.2 MODUL: SURAT PENAWARAN
+    Field input:
+      - Logo kop surat (upload gambar, tampil di kanan atas preview).
+      - Identitas Surat: Nomor, Tanggal, Perihal.
+      - Nama Kegiatan / Program (textarea).
+      - Daftar Barang (repeater, minimum 1 item):
+          * Nama Barang
+          * Spesifikasi Teknis
+          * Jumlah
+          * Harga Satuan (input bebas, diformat otomatis ke Rupiah)
+          * Total (read-only, auto = Jumlah × Harga Satuan)
+        Tombol "+ Tambah Item" dan ikon hapus (×) di setiap item.
+      - Keterangan:
+          * Garansi
+          * Waktu Pengiriman
+          * Masa Berlaku Penawaran
+    Struktur preview output:
+      - Kop surat dengan logo (jika ada) di kanan atas.
+      - Nomor & Perihal.
+      - Alamat tujuan (otomatis dari p2 di Setup Proyek).
+      - Paragraf pembuka.
+      - Tabel penawaran: No | Nama Barang | Spesifikasi | Jumlah | Harga Satuan
+        | Total Harga. Baris terakhir: "Total Penawaran" (highlighted).
+      - Blok "Keterangan" (bullet italic).
+      - Blok tanda tangan di kanan (Hormat kami — nama + jabatan Pihak Pertama).
+
+6.3 MODUL: BERITA ACARA SERAH TERIMA
+    Field input:
+      - Logo kop surat (bersama tab Surat).
+      - Identitas Dokumen: Nomor BA, Hari, Tanggal, Tempat.
+      - Nama Kegiatan (textarea).
+      - Daftar Barang (repeater, minimum 1 item):
+          * Nama Barang
+          * Jumlah
+          * Spesifikasi (default "Sesuai")
+          * Kondisi (default "Baik")
+      - Penandatanganan: Tempat Pembuatan, Tanggal Pembuatan.
+    Struktur preview output:
+      - Judul tengah: "BERITA ACARA SERAH TERIMA" + Nomor.
+      - Paragraf pembuka dengan hari/tanggal/tempat.
+      - Identitas PIHAK PERTAMA (I.) dan PIHAK KEDUA (II.) otomatis dari Setup.
+      - PASAL 1 — OBJEK SERAH TERIMA (berisi tabel barang).
+      - Rujukan silang ke Nomor SPK + Tanggal SPK (dari Setup Proyek).
+      - PASAL 2 — KONDISI PENYERAHAN (3 poin baku).
+      - PASAL 3 — PENUTUP.
+      - Dua blok tanda tangan (kiri = Pihak Pertama, kanan = Pihak Kedua).
+
+6.4 MODUL: PERJANJIAN KERJASAMA
+    Fitur khusus: pemilih sub-tipe (Barang / Jasa) dengan konfirmasi reset.
+    Field input:
+      - Toggle "Pengadaan Barang" vs "Pengadaan Jasa"
+        * Mengganti tipe memicu confirm: "Mengganti tipe akan mereset semua
+          pasal ke template default. Lanjutkan?"
+        * Judul dokumen otomatis menyesuaikan.
+        * Daftar pasal di-reset ke template sub-tipe (13 pasal untuk Barang,
+          12 pasal untuk Jasa).
+      - Identitas Dokumen: Judul, Nomor, Tanggal, Tempat, Hari Tanda Tangan.
+      - Konsideran / Menimbang (textarea, opsional).
+      - Builder Pasal (hierarkis):
+          * Daftar Pasal (Pasal 1, 2, 3, ...)
+              - Judul Pasal (input di header).
+              - Kalimat Pembuka / intro (opsional, textarea).
+              - Poin-poin (nomor 1, 2, 3 ...)
+                  - Sub-poin (huruf a, b, c ...)
+          * Operasi per Pasal:
+              - Edit judul
+              - Edit intro
+              - Reorder (↑ / ↓)
+              - Hapus
+              - Collapse / Expand (klik header)
+          * Operasi per Poin:
+              - Edit teks (textarea)
+              - Tambah sub-poin
+              - Hapus
+          * Operasi per Sub-poin:
+              - Edit teks
+              - Hapus
+      - Tombol "+ Tambah Pasal" menambah pasal kosong dengan judul "Pasal Baru".
+    Struktur preview output:
+      - Judul tengah besar + Nomor + "Jenis: Pengadaan Barang/Jasa".
+      - Paragraf pembuka (hari/tanggal/tempat).
+      - Blok Pihak Pertama (I.) dan Pihak Kedua (II.) dengan "Bertindak atas
+        nama".
+      - Blok "Menimbang" (jika konsideran diisi) dengan border emas kiri.
+      - Paragraf transisi: "Maka berdasarkan hal tersebut ... sebagai berikut:".
+      - Daftar Pasal (rata tengah), dengan numbered list dan nested ordered
+        list tipe "a" untuk sub-poin.
+      - Paragraf penutup "Demikian Perjanjian ini dibuat dalam rangkap 2...".
+      - Dua blok tanda tangan.
+    Info meta di preview: "{N} pasal · {M} poin".
+
+    TEMPLATE BARANG (13 pasal default):
+      1. Ketentuan Umum
+      2. Ruang Lingkup Pengadaan
+      3. Spesifikasi Teknis dan Kualitas
+      4. Jangka Waktu Perjanjian
+      5. Kewajiban Pihak Pertama
+      6. Kewajiban Pihak Kedua
+      7. Harga dan Pembayaran
+      8. Penyerahan dan Pemeriksaan Barang
+      9. Garansi dan Jaminan Mutu
+     10. Keadaan Kahar
+     11. Pemutusan Perjanjian
+     12. Penyelesaian Sengketa
+     13. Kerahasiaan dan Penutup
+
+    TEMPLATE JASA (12 pasal default):
+      1. Objek dan Ruang Lingkup Perjanjian
+      2. Jangka Waktu Perjanjian
+      3. Kewajiban Pihak Pertama
+      4. Kewajiban Pihak Kedua
+      5. Standar Kualitas Layanan
+      6. Harga dan Pembayaran
+      7. Pelaporan dan Pengawasan
+      8. Pengalihan dan Sub-Kontrak
+      9. Keadaan Kahar
+     10. Pemutusan Perjanjian
+     11. Penyelesaian Sengketa
+     12. Kerahasiaan dan Penutup
+
+6.5 MODUL: NDA (PERNYATAAN KERAHASIAAN)
+    Fitur khusus: satu pihak adalah perorangan (Pihak Penerima), sementara
+    Pihak Pengungkap diambil otomatis dari p1 Setup Proyek.
+    Field input:
+      - Banner dasar hukum: UU No. 30 Tahun 2000 + Pasal 1320 KUHPerdata
+        (read-only, informatif).
+      - Identitas Dokumen: Nomor NDA, Tanggal, Hari, Tempat.
+      - Pihak Penerima (individual):
+          * Nama Lengkap
+          * No. KTP
+          * Alamat (textarea)
+          * Jabatan
+          * Organisasi / Perusahaan
+          * Nomor Kontrak / SPK
+          * Tanggal Kontrak / SPK
+      - Pihak Pengungkap (read-only, menampilkan data p1 Setup Proyek dengan
+        tombol shortcut "Ubah di Setup Proyek ↗").
+      - Konteks & Isi NDA (semua textarea):
+          * Konteks Pelaksanaan
+          * Jenis Dukungan / Kerjasama
+          * Objek / Ruang Lingkup Kegiatan
+          * Objek Informasi Rahasia
+          * Jangka Waktu Kerahasiaan (default "2 (dua) tahun").
+    Struktur preview output (teks baku terintegrasi):
+      - Judul "PERNYATAAN KERAHASIAAN (Non-Disclosure Agreement)" + Nomor.
+      - Paragraf pembuka hari/tanggal/tempat.
+      - Blok Pihak Penerima (I.) dengan semua field identitas.
+      - Blok Pihak Pengungkap (II.) dari Setup.
+      - Tiga paragraf "BAHWA" mengisi placeholder dari field konteks.
+      - Paragraf "DENGAN DEMIKIAN ... Pasal 1320 KUHPerdata".
+      - Pasal 1. Informasi Rahasia (3 poin, menyisipkan jangka waktu user).
+      - Pasal 2. Informasi Bukan Rahasia (3 butir a–c).
+      - Pasal 3. Kewajiban Pihak Penerima (4 poin).
+      - Pasal 4. Ketentuan Lain-Lain (5 poin).
+      - Lembar Penandatanganan (blok info berwarna emas).
+      - Dua tanda tangan (Penerima — Pengungkap).
+      - Footer hukum: rujukan UU 30/2000 Pasal 17 ayat (1).
+
+6.6 MODUL: RIWAYAT (HISTORY)
+    Layout: main area + sidebar kanan (260px) untuk Snapshots.
+    Komponen:
+      - Header: tombol "Export Log" (JSON) + "Hapus Semua" (destructive).
+      - Stat Cards (4 kotak): Total Aktivitas, Edit & Buat, Ekspor & Cetak,
+        Snapshots.
+      - Filter pills: Semua | Surat | Berita | Perjanjian | Setup Proyek |
+        Snapshots. CATATAN: filter NDA TIDAK tersedia saat ini —
+        aktivitas NDA hanya muncul di "Semua" (lihat §15.1).
+      - Daftar log dikelompokkan per hari, descending.
+      - Setiap entri log:
+          * Ikon + warna sesuai action type (lihat 7.2).
+          * Label action + chip jenis dokumen + nomor dokumen (bila ada).
+          * Ringkasan teks.
+          * Timestamp "dd MMM yyyy · hh:mm".
+          * Tombol "Pulihkan" (khusus entri SNAPSHOT).
+          * Tombol "✕" untuk menghapus entri.
+          * Indikator expand "▼" bila entri punya detail (changes / snapshot).
+      - Detail expand entri EDIT:
+          * Daftar field yang berubah: "field — [from] → [to]" (pill merah/hijau).
+      - Detail expand entri SNAPSHOT:
+          * Preview JSON data snapshot (maks 600 char, truncated "...").
+      - Sidebar Snapshots:
+          * Kartu per snapshot: label, timestamp, chip tipe dokumen,
+            ringkasan konten (mis. "Barang · 13 pasal"), tombol Pulihkan.
+          * Urutan: paling baru di atas.
+
+--------------------------------------------------------------------------------
+7. FITUR LINTAS-MODUL
+--------------------------------------------------------------------------------
+
+7.1 SNAPSHOT & RESTORE
+    - Tombol Snapshot tersedia di topbar tiap tab dokumen + di Setup Proyek.
+    - Membuat snapshot = menyimpan deep-copy state dokumen saat ini + menulis
+      log SNAPSHOT.
+    - Label default: "Snapshot dd/mm/yyyy hh:mm".
+    - Restore dari snapshot:
+        * Konfirmasi via dialog confirm: "Data saat ini akan diganti."
+        * Mengganti state dokumen, menulis log RESTORE, lalu switch ke tab
+          dokumen yang dipulihkan.
+    - Restore juga bisa dipicu dari entri log SNAPSHOT yang dibuka di Riwayat.
+
+7.2 LOGGING AKTIVITAS
+    Action types (dengan ikon & warna):
+      - CREATE       ✦  Hijau   — Dokumen dibuat
+                                  (DEFINED tapi tidak pernah dipicu di
+                                   kode saat ini — lihat §15.3)
+      - EDIT         ✎  Emas    — Dokumen diubah (with field-level diff;
+                                  TIDAK mencakup perubahan isi
+                                  item/poin/sub-poin — lihat §15.2)
+      - EXPORT_PDF   ⬇  Biru    — Ekspor PDF
+      - EXPORT_HTML  ⬇  Ungu    — Ekspor HTML
+      - EXPORT_JSON  ⬇  Hijau   — Ekspor JSON
+      - PRINT        ⎙  Abu     — Dicetak
+      - SNAPSHOT     ◉  Merah   — Snapshot disimpan
+      - RESTORE      ↩  Hijau   — Dipulihkan
+    Debounce: perubahan field dicatat setelah user diam selama 1.6 detik.
+    Diff scope: mengabaikan field `items` dan `pasal` untuk diff object;
+    sebagai gantinya menulis diff "items.count" / "pasal.count" bila jumlah
+    berubah.
+    Badge "Riwayat" menampilkan jumlah aktivitas 1 jam terakhir.
+
+7.3 EKSPOR & CETAK
+    - Save as PDF: memanggil window.print(); user memilih "Save as PDF" di
+      dialog printer.
+    - Save as HTML: menghasilkan file HTML standalone dengan font Google
+      embedded + CSS minimum. Nama file: Surat_Penawaran.html /
+      Berita_Acara_Serah_Terima.html / Perjanjian_Kerjasama.html.
+    - Save as JSON: menyimpan project + surat + berita + perjanjian ke
+      "data_pengadaan.json" beserta metadata (exportedAt, version).
+      CATATAN: data NDA TIDAK disertakan pada ekspor JSON saat ini
+      (lihat §15.1 — kemungkinan gap / bug).
+    - Copy JSON: menulis JSON yang sama ke clipboard (NDA juga tidak
+      disertakan).
+    - Print: sama dengan PDF tapi tanpa label "ekspor".
+    - CSS print mode (@media print): menyembunyikan .no-print, topbar, tab
+      bar, panel form; menampilkan paper penuh, menghindari page-break di
+      tengah blok pasal.
+    - Halaman target cetak: A4, margin 1cm.
+
+7.4 LOGO / KOP SURAT
+    - Upload hanya untuk tab Surat & Berita (shared storage `state.logo`).
+    - Input: PNG/JPG/SVG, maksimum 2 MB (disampaikan via hint teks, tidak
+      hard-enforced di kode saat ini).
+    - Disimpan sebagai data URL base64 di localStorage.
+    - Preview di panel form menampilkan thumbnail + tombol hapus (×).
+    - Di preview dokumen, logo muncul di posisi absolute kanan atas (maks
+      tinggi 72px / lebar 150px).
+    - Placeholder dashed "Logo Perusahaan" tampil bila belum upload (tidak
+      tercetak — kelas .no-print).
+
+7.5 PERSISTENSI
+    - Seluruh state di-persist ke localStorage setiap kali berubah.
+    - Keys: kimu_logs, kimu_snapshots, kimu_project, kimu_surat, kimu_berita,
+      kimu_perjanjian, kimu_nda, kimu_logo.
+    - Pada load halaman: loadPersisted() memulihkan seluruh state jika ada.
+    - Tidak ada enkripsi (pertimbangan: aplikasi single-user lokal).
+    - Tidak ada quota handling khusus — operasi persist dibungkus try/catch
+      silent.
+
+7.6 TOAST & FEEDBACK
+    - Notifikasi non-blocking kanan atas (top:18px, right:18px).
+    - Warna hijau tua #1c3a27.
+    - Durasi 3 detik, animasi fade-in.
+    - Dipakai untuk konfirmasi sukses (simpan PDF, snapshot, logo, dsb).
+
+--------------------------------------------------------------------------------
+8. DATA MODEL (STRUKTUR STATE)
+--------------------------------------------------------------------------------
+state = {
+  currentTab: "project" | "surat" | "berita" | "perjanjian" | "nda" | "history",
+
+  project: {
+    p1Nama, p1Jabatan, p1Perusahaan, p1Alamat,
+    p2Nama, p2Jabatan, p2Organisasi, p2Alamat,
+    nomorSPK, tanggalSPK
+  },
+
+  surat: {
+    nomor, tanggal, perihal, namaProgram,
+    items: [{ id, nama, spesifikasi, jumlah, hargaSatuan }],
+    garansi, waktuKirim, masaBerlaku
+  },
+
+  berita: {
+    nomor, hari, tanggal, tempat, namaKegiatan,
+    items: [{ id, nama, jumlah, spesifikasi, kondisi }],
+    tempatBuat, tanggalBuat
+  },
+
+  perjanjian: {
+    tipe: "barang" | "jasa",
+    nomor, judul, tanggal, tempat, hariTtd, konsideran,
+    pasal: [{
+      id, judul, intro,
+      poin: [{ id, text, sub: [{ id, text }] }]
+    }]
+  },
+
+  nda: {
+    nomor, hari, tanggal, tempat,
+    pnNama, pnKtp, pnAlamat, pnJabatan, pnOrganisasi,
+    pnNomorKontrak, pnTanggalKontrak,
+    konteksPelaksanaan, jenisDukungan, objekKegiatan,
+    objekInformasi, jangkaWaktu
+  },
+
+  logs: [{ id, action, docType, summary, timestamp, changes?, snapshot?, docNum? }],
+
+  snapshots: [{ id, timestamp, docType, data, label }],
+
+  logFilter: "all" | "surat" | "berita" | "perjanjian" | "project" | "snapshots",
+
+  collapsedPasal: { [pasalId]: boolean },
+
+  logo: string | null   // data URL base64
+}
+
+--------------------------------------------------------------------------------
+9. ALUR PENGGUNA UTAMA
+--------------------------------------------------------------------------------
+Alur 1. Onboarding / Isi pertama kali
+  1) User membuka halaman. Tab default: Setup Proyek.
+  2) User mengisi data Pihak Pertama, Pihak Kedua, dan Nomor/Tanggal SPK.
+  3) Status dot "Setup" berubah hijau saat p1Nama terisi.
+
+Alur 2. Membuat Surat Penawaran
+  1) Dari Setup, user klik "→ Surat Penawaran".
+  2) User upload logo (opsional).
+  3) User isi Nomor, Tanggal, Perihal, nama program.
+  4) User menambah item barang (minimum 1). Total auto-terhitung.
+  5) User mengisi garansi, waktu kirim, masa berlaku.
+  6) Preview di kanan ter-update real-time.
+  7) User klik Print / Save PDF.
+
+Alur 3. Membuat Berita Acara
+  1) User pindah ke tab Berita Acara. Data pihak & SPK ikut otomatis.
+  2) User isi nomor, hari/tanggal/tempat, nama kegiatan, daftar barang.
+  3) User mengatur tempat & tanggal pembuatan.
+  4) Ekspor ke PDF/HTML.
+
+Alur 4. Membuat Perjanjian Kerjasama
+  1) User membuka tab Perjanjian.
+  2) User memilih sub-tipe (Barang/Jasa) — akan reset ke template.
+  3) User mengedit judul, nomor, tanggal, konsideran.
+  4) User mengkurasi pasal: menambah/menghapus/mengurutkan, mengedit poin
+     dan sub-poin. Collapse pasal untuk fokus bekerja.
+  5) User ekspor.
+
+Alur 5. Membuat NDA
+  1) User membuka tab NDA.
+  2) Sistem menampilkan Pihak Pengungkap otomatis dari Setup Proyek.
+  3) User mengisi identitas Pihak Penerima (perorangan) dan konteks NDA.
+  4) Preview memproyeksikan placeholder menjadi kalimat lengkap.
+  5) User ekspor.
+
+Alur 6. Snapshot & Restore
+  1) Pada setiap dokumen, user klik "Snapshot" sebelum perubahan besar.
+  2) Di tab Riwayat, sidebar Snapshots atau entri log SNAPSHOT, user klik
+     "Pulihkan".
+  3) Sistem konfirmasi, lalu mengganti state dokumen dan berpindah tab.
+
+Alur 7. Memeriksa & memulihkan perubahan
+  1) User buka tab Riwayat.
+  2) Filter berdasarkan jenis dokumen.
+  3) Klik entri EDIT untuk melihat field-level diff.
+  4) Jika ingin kembali ke versi sebelumnya, gunakan snapshot terdekat.
+
+--------------------------------------------------------------------------------
+10. KEBUTUHAN NON-FUNGSIONAL
+--------------------------------------------------------------------------------
+NF1. Offline-capable: Setelah halaman dimuat pertama, aplikasi berfungsi
+     tanpa internet (kecuali font Google yang di-cache browser).
+NF2. Single-file deployment: Seluruh HTML + CSS + JS dalam satu file agar
+     mudah didistribusikan (email, flashdisk, shared drive).
+NF3. Bahasa: Seluruh UI, teks dokumen default, dan format tanggal
+     menggunakan Bahasa Indonesia (locale id-ID).
+NF4. Format mata uang: Rupiah dengan pemisah ribuan titik (id-ID).
+NF5. Responsivitas: Dioptimalkan untuk desktop (lebar minimum ≈ 1024px).
+     Tidak menargetkan mobile.
+NF6. Tidak ada autentikasi, multi-user, atau sinkronisasi cloud. Data
+     terikat pada browser/perangkat yang dipakai.
+NF7. Keamanan: HTML-escape diterapkan pada semua user input saat di-render
+     untuk mencegah XSS self-injection.
+NF8. Aksesibilitas dasar: kontras teks cukup, semua input punya label,
+     tombol punya teks — namun tidak secara eksplisit diaudit WCAG.
+NF9. Performa: re-render DOM penuh per tab saat ada perubahan. Tidak
+     terukur sebagai bottleneck pada ukuran data normal (≤ 50 item,
+     ≤ 30 pasal).
+
+--------------------------------------------------------------------------------
+11. ATURAN BISNIS / LOGIKA IMPLISIT
+--------------------------------------------------------------------------------
+AB1. Status "siap" sebuah dokumen = memiliki Nomor. (Ini satu-satunya
+     gating untuk indikator status dot.)
+AB2. Mengganti tipe Perjanjian akan menghapus semua pasal yang sudah
+     dikustomisasi. Harus ada konfirmasi eksplisit.
+AB3. Snapshot tidak otomatis; user harus memicu manual.
+AB4. Log EDIT hanya dicatat bila ada perubahan nyata (diff > 0).
+AB5. Hapus log adalah permanen — tidak ada tempat sampah.
+AB6. Semua dokumen turunan membaca p1/p2 secara live dari Setup Proyek.
+     Mengubah Setup akan mengubah preview seluruh dokumen (dan ini
+     disengaja — tidak dikunci per dokumen).
+AB7. NDA khusus menggunakan p1 (Pihak Pertama) sebagai "Pihak Pengungkap"
+     dan data individual baru sebagai "Pihak Penerima". Pihak Penerima
+     TIDAK diambil dari p2 karena konteks NDA biasanya menyertakan
+     individu spesifik beserta KTP-nya.
+AB8. Total pada Surat Penawaran adalah read-only derived value. User tidak
+     bisa menimpanya.
+
+--------------------------------------------------------------------------------
+12. OUT OF SCOPE (EKSPLISIT TIDAK DIDUKUNG)
+--------------------------------------------------------------------------------
+OS1. Tanda tangan digital / e-meterai.
+OS2. Multi-user collaboration / real-time editing.
+OS3. Sinkronisasi cloud / backup otomatis.
+OS4. Versioning terstruktur (hanya ada snapshot manual, bukan git-like).
+OS5. Template custom yang dapat dimuat pengguna — hanya tersedia 2 template
+     baked-in (Barang / Jasa).
+OS6. Validasi format nomor dokumen (SPK, BA, PKS, NDA) — bebas diketik.
+OS7. Perhitungan PPN otomatis (disebut 11% di template tetapi tidak
+     dihitung di tabel).
+OS8. Ekspor langsung ke .docx (hanya HTML, JSON, dan PDF via print).
+OS9. Internationalization (i18n) — hardcoded Bahasa Indonesia.
+
+--------------------------------------------------------------------------------
+13. KRITERIA PENERIMAAN (ACCEPTANCE CRITERIA)
+--------------------------------------------------------------------------------
+AC1. Data yang diinput di Setup Proyek muncul otomatis & benar pada
+     preview keempat dokumen tanpa harus diisi ulang.
+AC2. Setelah refresh browser, semua data tetap ada (localStorage load).
+AC3. Menambah item pada Surat Penawaran langsung memperbarui total pada
+     tabel preview.
+AC4. Mengganti tipe Perjanjian memunculkan confirm dialog; jika dibatalkan,
+     pasal tetap utuh.
+AC5. Snapshot yang dibuat muncul di sidebar Riwayat dan dapat dipulihkan.
+AC6. Entri EDIT di Riwayat menampilkan daftar field yang berubah lengkap
+     dengan nilai lama → nilai baru.
+AC7. Tombol Print membuka dialog print browser dengan preview tata letak
+     paper bersih (form panel disembunyikan).
+AC8. Badge Riwayat menunjukkan jumlah aktivitas dalam 1 jam terakhir.
+AC9. Ekspor JSON menghasilkan file yang berisi project + surat + berita +
+     perjanjian.
+AC10. NDA menampilkan identitas Pihak Pengungkap dari Setup Proyek secara
+      read-only, dengan tombol shortcut ke Setup Proyek.
+
+--------------------------------------------------------------------------------
+14. DEPENDENSI EKSTERNAL
+--------------------------------------------------------------------------------
+- Google Fonts:
+    * Plus Jakarta Sans (body)
+    * Cormorant Garamond (judul dokumen)
+- Tidak ada library JS eksternal (pure vanilla JS, DOM API, localStorage,
+  FileReader, Clipboard API, window.print).
+
+--------------------------------------------------------------------------------
+15. TEMUAN MENDALAM & INKONSISTENSI (DEEP-ANALYSIS FINDINGS)
+--------------------------------------------------------------------------------
+Bagian ini mencatat temuan halus dari pembacaan source code yang bisa
+menjadi decision point pada iterasi selanjutnya — baik sebagai bug, gap,
+atau pilihan desain yang belum didokumentasikan.
+
+15.1 NDA Tidak Terintegrasi Penuh ke Pipeline Ekspor & Riwayat
+    Temuan: Walaupun NDA sudah menjadi tab dokumen utuh dengan state
+    sendiri, fungsi-fungsi ekspor dan filter tidak memasukkannya.
+      a) getPreviewHTML() hanya memetakan surat/berita/perjanjian
+         (line 1252). Jika user klik "Simpan HTML" saat aktif di tab
+         NDA, yang ter-ekspor adalah HTML KOSONG (body hanya berisi
+         font link).
+      b) saveHTML() — title mapping tidak mengenal "nda", jatuh ke
+         fallback "Dokumen.html".
+      c) saveJSON() — hanya mengemas project + surat + berita +
+         perjanjian (line 1269). Data NDA HILANG dari ekspor JSON.
+      d) copyJSON() — sama, NDA tidak disertakan (line 1276).
+      e) renderHistoryFilters() — filter pills tidak menyertakan NDA
+         (line 1125–1132). Aktivitas NDA hanya terlihat di filter
+         "Semua".
+    Status: Kemungkinan besar BUG / fitur parsial. NDA ditambahkan
+    belakangan dan belum disinkronkan ke layer ekspor/riwayat.
+
+15.2 Log EDIT Hanya Mencatat Perubahan Field Tingkat Atas
+    Temuan: diffObjects() eksplisit melewati key "items" dan "pasal"
+    (line 276). Konsekuensinya:
+      - Mengubah nama/harga item di Surat Penawaran: TIDAK masuk log.
+      - Mengubah teks poin/sub-poin di Perjanjian: TIDAK masuk log.
+      - Menambah/menghapus item atau pasal: hanya tercatat sebagai
+        "items.count" / "pasal.count" (jumlah from → to), tanpa
+        detail apa yang berubah.
+    Implikasi: Audit trail tidak cukup granular untuk pembuktian hukum
+    perubahan isi perjanjian. Perlu keputusan: apakah ini by-design
+    (demi menghindari log spam) atau perlu diperdalam?
+    Juga perhatikan: updateSuratItem(), updateBeritaItem(), updatePoin(),
+    updateSubPoin(), updatePasalJudul(), updatePasalIntro(), addPasal(),
+    deletePasal(), addPoin(), deletePoin() — tak satu pun memanggil
+    scheduleEditLog secara langsung. Mereka mengandalkan updatePerjanjian
+    atau serupa agar log tercatat, padahal user umumnya mengedit konten
+    pasal tanpa menyentuh field tingkat atas.
+
+15.3 Action Type "CREATE" Didefinisikan tapi Tidak Pernah Dipicu
+    Temuan: LOG_CFG.CREATE ada (label "Dokumen Dibuat", ikon ✦, hijau)
+    dan stat card "Edit & Buat" menghitungnya (line 1113), namun
+    writeLog("CREATE",...) TIDAK pernah dipanggil di seluruh kode.
+    Implikasi: Stat "Edit & Buat" efektif hanya menghitung EDIT.
+    Keputusan yang perlu diambil:
+      - Apakah log CREATE harus dipicu saat user pertama kali mengisi
+        Nomor dokumen (status dot berubah hijau)?
+      - Atau saat dokumen diekspor pertama kali?
+
+15.4 Berita Acara Memiliki Pasal Hard-coded, Tidak Seperti Perjanjian
+    Temuan: renderDocBerita() membakukan PASAL 1 (Objek Serah Terima),
+    PASAL 2 (Kondisi Penyerahan — 3 butir tetap), dan PASAL 3 (Penutup)
+    langsung di HTML template (line 992–1008). Tidak ada editor pasal
+    seperti di Perjanjian.
+    Implikasi: Kontras desain antara dua dokumen legal serupa. Jika
+    kebutuhan ke depan ingin BAST yang fleksibel (misal tambah klausul
+    khusus), harus refactor besar.
+
+15.5 Surat Penawaran Memiliki Frasa Domain-Spesifik Hard-coded
+    Temuan: Line 934 preview Surat menulis literal
+      "...untuk kegiatan Pengadaan Mushaf untuk keperluan [namaProgram]..."
+    "Pengadaan Mushaf" tidak dapat diubah oleh user — hanya namaProgram
+    yang editable. Ini menunjukkan aplikasi awalnya didesain untuk
+    pengadaan Al-Qur'an (Yayasan Muhajir Peduli Indonesia).
+    Implikasi: Untuk generalisasi ke pengadaan lain (alat tulis, IT,
+    dsb), frasa "Pengadaan Mushaf" perlu dijadikan field editable atau
+    diambil dari judul/perihal.
+
+15.6 State Default Berisi Data Produksi Nyata
+    Temuan: state.project diinisialisasi dengan nama & alamat nyata:
+      - Iskandarsyah Karim, Direktur PT Kimu Edu Indonesia
+      - Muhammad Yuliman S, Ketua Tim Pengadaan YMPI
+      - Alamat Gedung 18 Office Park & Jalan Cipaku I Jakarta Selatan
+      - Nomor SPK "001/SPK.PROC-YMPI/X/2025"
+    state.berita.items berisi 4 item Al-Qur'an Mushaf dengan kuantitas
+    spesifik (20.000 / 5.000 / 10.000 eks).
+    Implikasi privasi/keamanan: Bila HTML disebar, data pihak nyata
+    ikut terbawa. Perlu keputusan: jadikan data demo generik, atau
+    kosongkan default, atau tambahkan disclaimer.
+
+15.7 State UI Tidak Dipersistensi Sepenuhnya
+    Temuan: persist() hanya menyimpan logs, snapshots, project, surat,
+    berita, perjanjian, nda, dan logo. TIDAK menyimpan:
+      - state.currentTab — setiap reload kembali ke Setup Proyek.
+      - state.logFilter — setiap reload kembali ke "all".
+      - state.collapsedPasal — seluruh pasal kembali expanded.
+    Implikasi: User yang sedang fokus mengedit satu pasal perlu
+    re-collapse setelah refresh. Tidak kritikal tapi mengurangi
+    kenyamanan pada dokumen panjang.
+
+15.8 Logo Base64 Berpotensi Melebihi Kuota localStorage
+    Temuan: Logo disimpan sebagai data URL di kimu_logo. Batas ukuran
+    2 MB hanya DIINFORMASIKAN di UI (line 1339), TIDAK divalidasi saat
+    upload (line 1298–1311). localStorage umumnya 5–10 MB per origin;
+    jika user upload PNG besar, operasi persist() akan gagal silent
+    (dibungkus try/catch kosong).
+    Rekomendasi: validasi ukuran + resize ke max ~200 KB sebelum
+    disimpan.
+
+15.9 Logs Tidak Memiliki Mekanisme Rotasi
+    Temuan: state.logs hanya push, tidak pernah di-trim otomatis.
+    Setelah ribuan edit, localStorage bisa penuh dan persist() diam-
+    diam gagal (try/catch kosong di line 511–523).
+    Rekomendasi: batasi 1000 entri terakhir atau auto-prune entri >30
+    hari.
+
+15.10 printDoc & savePDF Memanipulasi document.title
+    Temuan: Sebelum memanggil window.print(), document.title diset ke
+    " " (satu spasi) untuk mencegah browser menamai file PDF dengan
+    judul halaman. Direstorasi via window.onafterprint.
+    Implikasi: Trik ini rapuh — jika onafterprint tidak ter-fire
+    (beberapa browser), judul tetap " " sampai refresh. Perlu fallback
+    setTimeout.
+
+15.11 Ekspor JSON Tidak Mencakup Log & Snapshots
+    Temuan: saveJSON() mengemas data dokumen saja. Untuk mengekspor
+    log, user harus menggunakan tombol "Export Log" terpisah di tab
+    Riwayat (exportLog()), yang TIDAK menyertakan data dokumen.
+    Implikasi: Tidak ada satu file ekspor lengkap "backup seluruh
+    aplikasi". User harus mengambil dua file dan menggabungkan manual.
+
+15.12 Format & Konvensi Input Bebas — Tidak Ada Validasi
+    Tidak ada validasi pada:
+      - Format Nomor (SPK, BA, PKS, NDA) — bebas teks.
+      - Format Tanggal — bebas teks ("1 Oktober 2025" vs
+        "2025-10-01" sama-sama diterima).
+      - Format KTP pada NDA — 16 digit tidak diverifikasi.
+      - Format Rupiah — hanya digit yang diekstrak; "Rp", ".", "," dan
+        teks lain dibersihkan oleh toNum().
+    Implikasi: Risiko ketidakonsistenan antar dokumen. Misal tanggal
+    SPK di Setup "1 Oktober 2025" vs preview BA mengandalkan
+    pengisian user "15 Desember 2025" secara manual.
+
+15.13 Addon: Label "Dokumen Pengadaan"
+    Title tag HTML berbeda dengan branding topbar:
+      - <title>: "Dokumen Pengadaan"
+      - Topbar: "Doc Manager" / "Document Management System"
+    Sebaiknya diseragamkan.
+
+15.14 Status Dot Hanya Cek Nomor Dokumen
+    Indikator kesiapan dokumen (dot hijau) semata-mata mengecek
+    boolean `!!state.X.nomor`. Dokumen dengan nomor "X" tapi tanpa
+    item/pasal tetap tampil "siap". Perlu keputusan apakah kriteria
+    ini cukup, atau ditambah cek minimal item / tanda tangan.
+
+15.15 Pasal 7 Template Barang Menyebut PPN 11%, Tapi Tidak Dihitung
+    Template berisi kalimat "Pajak Pertambahan Nilai (PPN) sebesar 11%
+    telah diperhitungkan dalam Harga Perjanjian" — namun tabel harga
+    di Surat Penawaran tidak memiliki baris PPN. User harus
+    memasukkan harga yang sudah include PPN, atau menerima klaim ini
+    sebagai formalitas teks.
+
+15.16 Snapshot Berisi Deep-Copy Data, Tapi Tidak Berisi Hash
+    Snapshot tidak memiliki integrity hash, sehingga tidak bisa
+    memverifikasi apakah JSON snapshot ditampilkan = JSON saat dibuat.
+    Cukup untuk use-case internal, tidak cukup untuk keperluan
+    forensik.
+
+15.17 Hapus Entri Log Tidak Diberi Konfirmasi
+    Tombol ✕ pada baris log memanggil deleteLog() langsung tanpa
+    confirm (line 1222). Klik tidak sengaja = log hilang permanen.
+    Inkonsisten dengan "Hapus Semua" yang pakai confirm.
+
+15.18 Re-render Form Dapat Menghilangkan Fokus Input
+    addPoin(), deletePoin(), addPasal(), deletePasal(), movePasal(),
+    switchTipePerjanjian(), addSuratItem(), deleteSuratItem(),
+    addBeritaItem(), deleteBeritaItem(), addSubPoin(), deleteSubPoin()
+    — semua memanggil renderXxxForm() yang meng-innerHTML ulang panel
+    form. Ini me-reset fokus keyboard; user yang mengedit cepat bisa
+    kehilangan posisi kursor. Update teks (oninput) tidak me-re-render
+    form, hanya preview — jadi hanya struktur-changing action yang
+    berdampak.
+
+15.19 Tidak Ada Indikator "Unsaved" — Namun Memang Selalu Tersimpan
+    Karena setiap keystroke langsung persist() ke localStorage, tidak
+    ada konsep "unsaved changes". Trade-off: risiko kehilangan data
+    minimal, tapi tidak ada "discard changes" — untuk membatalkan,
+    user harus Restore dari snapshot terakhir.
+
+15.20 Nomor Halaman PDF Tidak Diatur
+    CSS @page hanya mendefinisikan margin 1cm dan size A4. Tidak ada
+    counter halaman. Dokumen multi-halaman (Perjanjian panjang) akan
+    tercetak tanpa footer "Halaman X dari Y".
+
+15.21 Print CSS Tidak Menyembunyikan Panel Form NDA (BUG)
+    Temuan: Line 110 pada @media print:
+      #panel-form-surat,#panel-form-berita,#panel-form-perjanjian
+        { display:none!important }
+    Tidak ada selector untuk #panel-form-nda. Akibatnya, saat user
+    mencetak dari tab NDA, panel form kiri TETAP terlihat di output
+    print/PDF, merusak tata letak.
+    Ini konsisten dengan pola NDA-sebagai-fitur-tambahan-yang-belum-
+    diintegrasikan (§15.1).
+    Fix: tambahkan #panel-form-nda ke selector line 110.
+
+15.22 Dead Code di renderHistoryList (kode "zombie")
+    Temuan: Line 1150:
+      const days = Object.keys(grouped)
+        .sort((a,b)=>new Date(b)-new Date(a)||0)
+        .reverse()
+        .sort(()=>-1);
+    Variabel `days` dihitung tapi TIDAK pernah dipakai di render. Baris
+    rendering sebenarnya pakai Object.entries(grouped).sort(...) di
+    line 1152. Selain membuang CPU, pola .sort(()=>-1) menghasilkan
+    perilaku tidak deterministik (V8 bisa atau tidak mengocok array
+    tergantung versi).
+    Fix: hapus baris 1150.
+
+15.23 Pasal, Poin, Sub-poin Tidak Memiliki Minimum-Count Protection
+    Temuan: deletePasal / deletePoin / deleteSubPoin langsung filter
+    tanpa cek jumlah tersisa dan tanpa confirm.
+    Kontras dengan deleteSuratItem / deleteBeritaItem yang tombol ×
+    disembunyikan saat items.length === 1 (tetapi tetap tidak pakai
+    confirm — user tidak bisa hapus item terakhir secara UI).
+    Konsekuensi: user bisa secara tidak sengaja menghapus semua pasal
+    dari Perjanjian, menyisakan dokumen hanya berisi pembuka + blok
+    pihak + konsideran + penutup. Tidak ada undo selain restore
+    snapshot.
+    Rekomendasi: minimal tambah confirm() pada deletePasal, atau
+    enforce minimum 1 pasal.
+
+15.24 Default Tanggal Tidak Konsisten Antar Dokumen
+    Temuan:
+      - state.surat.tanggal       = todayStr  (dinamis, hari ini)
+      - state.perjanjian.tanggal  = todayStr  (dinamis)
+      - state.nda.tanggal         = todayStr  (dinamis)
+      - state.berita.tanggal      = "15 Desember 2025" (HARDCODED)
+      - state.berita.tanggalBuat  = "15 Desember 2025" (HARDCODED)
+      - state.berita.hari         = "Kamis" (HARDCODED)
+      - state.berita.tempat       = "Jakarta Selatan" (HARDCODED)
+    User yang membuat BAST hari ini akan melihat tanggal default dari
+    Desember 2025 — harus selalu ingat menggantinya. Semua dokumen
+    lain memakai tanggal hari ini otomatis.
+    Rekomendasi: samakan pola — semua tanggal default ke todayStr.
+
+15.25 Dua Field Lokasi Berbeda di Berita Acara
+    Temuan: state.berita memiliki dua field lokasi terpisah:
+      - `tempat`     — muncul di paragraf pembuka
+                       ("bertempat di <tempat>...")
+      - `tempatBuat` — muncul di paragraf penutup sebelum tanda tangan
+                       ("Dibuat dan ditandatangani di <tempatBuat>...")
+    Default masing-masing "Jakarta Selatan" vs "Jakarta".
+    Sulit dipahami oleh user awam — perlu label yang lebih eksplisit
+    di form, atau konsolidasi menjadi satu field jika memang sama.
+
+15.26 tanggalSPK di Setup Proyek Adalah Teks Bebas (Bukan Date)
+    Temuan: Nilai default "1 Oktober 2025" adalah string bebas. Tidak
+    ada date picker, tidak ada validasi format, tidak diparse sebagai
+    Date object. Di preview BAST, tanggal ini ditulis apa adanya.
+    Risiko inkonsistensi format antar dokumen (mis. SPK "1 Okt 2025"
+    vs BA "15 Desember 2025" — tidak ada pemeriksaan logis bahwa BA
+    harus setelah SPK).
+
+15.27 Meterai dan Rangkap Dokumen Tidak Parameterized
+    Temuan: Template Barang pasal 13 poin 3 menyebut "rangkap 2 (dua)
+    bermaterai cukup". Template Jasa pasal 12 poin 3 sama. Teks ini
+    tertulis langsung di string poin, tidak ada field untuk mengubah
+    jumlah rangkap atau jenis meterai (6000 vs 10000).
+    Bila user membutuhkan rangkap 3 atau lebih, harus edit teks poin
+    manual.
+
+15.28 JSON Metadata Version "2.0" Hardcoded (Potensi Hint Lama)
+    Temuan: saveJSON() line 1269 menulis metadata.version = "2.0".
+    Tidak ada konstanta APP_VERSION, tidak ada migration logic. String
+    "2.0" menunjukkan pernah ada versi sebelumnya — tapi tidak ada
+    strategi kompatibilitas saat import data versi lama (import juga
+    belum ada fiturnya).
+
+15.29 Placeholder Nomor Tidak Konsisten Antar Dokumen
+    Saat field nomor kosong, preview menampilkan placeholder berbeda:
+      - Surat    : "_______________" (15 underscore)
+      - Berita   : "_______________" (15 underscore)
+      - Perjanjian: "___/___/___"    (pattern 3 grup)
+      - NDA      : "_______________" (15 underscore)
+    Kontras Perjanjian mungkin disengaja (menyuruh user mengisi pola
+    A/B/C) tapi tidak dijelaskan di form.
+
+15.30 prevDocState Adalah Baseline Diff — Rentan Race Condition
+    Temuan: Variabel global prevDocState menyimpan "snapshot sebelum
+    edit" per docType. Alur update:
+      1) User mengetik → updateXxx dipanggil.
+      2) state.Xxx langsung berubah.
+      3) scheduleEditLog dijadwalkan 1600ms.
+      4) Setelah 1600ms idle, diff dihitung: prev (prevDocState) vs
+         curr (state).
+      5) Jika ada perubahan, log ditulis DAN prevDocState diganti
+         dengan deep-copy state saat ini.
+    Edge case: bila user edit → refresh (restart init) → prevDocState
+    direset dari persisted state, maka edit sebelum refresh tidak
+    pernah ter-log bila belum sempat 1600ms idle.
+    Kehilangan data minor tapi material untuk audit trail klaim
+    hukum.
+
+15.31 Tidak Ada beforeunload Warning
+    Karena setiap keystroke langsung persist, tidak ada risiko
+    "unsaved changes" — tetapi juga berarti tidak ada peringatan saat
+    user tanpa sengaja menutup tab saat timer debounce belum eksekusi
+    (lihat 15.30). Potensi kehilangan log EDIT terakhir.
+
+15.32 Text-Transform Hanya di Preview, Bukan Input
+    Judul pasal di form input bebas casing, sedangkan di preview
+    dipaksa UPPERCASE via CSS text-transform. Konsekuensi:
+      - Input "ketentuan umum" → preview "KETENTUAN UMUM".
+      - JSON export menyimpan nilai form (lowercase), bukan yang
+        tampak.
+    Bisa membingungkan saat user membaca JSON hasil ekspor.
+
+--------------------------------------------------------------------------------
+18. PETA PERAN PIHAK PER DOKUMEN (ROLE MAPPING MATRIX)
+--------------------------------------------------------------------------------
+Bagian ini menjelaskan pemetaan semantik dari Setup Proyek ke peran
+dokumen legal — penting karena istilah "Pihak Pertama/Kedua" bisa
+berbeda makna di tiap jenis dokumen.
+
+Data di Setup Proyek:
+  p1 → "Pihak Pertama (Penyedia)"   — default: PT Kimu Edu Indonesia
+  p2 → "Pihak Kedua (Penerima)"     — default: Yayasan Muhajir Peduli
+
++-------------------+-------------------+-------------------+
+| DOKUMEN           | ROLE p1           | ROLE p2           |
++-------------------+-------------------+-------------------+
+| Surat Penawaran   | Pengirim surat    | "Kepada Yth."     |
+|                   | (Hormat kami)     | (tujuan surat)    |
++-------------------+-------------------+-------------------+
+| Berita Acara      | Pihak Pertama     | Pihak Kedua       |
+|                   | (Yang menyerahkan)| (Yang menerima)   |
++-------------------+-------------------+-------------------+
+| Perjanjian        | PIHAK PERTAMA     | PIHAK KEDUA       |
+|                   | (Penyedia jasa/   | (Pemesan jasa/    |
+|                   |  barang)          |  barang)          |
++-------------------+-------------------+-------------------+
+| NDA               | Pihak Pengungkap  | TIDAK DIPAKAI     |
+|                   | (Disclosing)      | p2 dari Setup     |
+|                   |                   | diabaikan         |
++-------------------+-------------------+-------------------+
+
+Catatan kritis untuk NDA:
+  - Pihak Penerima (receiving party) di NDA TIDAK diambil dari p2,
+    melainkan field terpisah (pnNama, pnKtp, pnJabatan, dsb.) yang
+    diasumsikan perorangan + KTP + afiliasi organisasi.
+  - Asumsi aplikasi: p1 (Penyedia) adalah pihak yang membagikan
+    informasi rahasia kepada konsultan/mitra eksternal. Asumsi ini
+    valid untuk skenario "PT Kimu merekrut advisor", tetapi TIDAK
+    umum untuk NDA vendor-klien (di mana BUYER biasanya yang
+    membagikan rahasia).
+  - Bila use case sebenarnya adalah Yayasan (p2) membagikan info
+    rahasia ke PT Kimu (p1), user harus menyalin data ke Setup Proyek
+    secara manual atau menukar p1/p2 — skenario yang rawan kesalahan.
+    Pertimbangkan menambahkan toggle "Siapa Pihak Pengungkap?" di tab
+    NDA.
+
+Konsistensi role juga berimplikasi pada urutan tanda tangan: di
+Berita Acara, Perjanjian, dan NDA, p1 selalu di kiri/atas, p2/
+Pihak Penerima di kanan/bawah. Surat hanya punya satu tanda tangan
+(p1).
+
+--------------------------------------------------------------------------------
+19. PETA PERSISTENSI & SUMBER DATA (DATA-FLOW MATRIX)
+--------------------------------------------------------------------------------
++-----------------+--------------+----------+----------+----------+
+| KEY             | DEFAULT      | PERSISTED| LOGGED   | EXPORTED |
++-----------------+--------------+----------+----------+----------+
+| project         | real data    | kimu_    | EDIT     | JSON ✓   |
+|                 | (PT Kimu/    | project  |          |          |
+|                 |  YMPI)       |          |          |          |
++-----------------+--------------+----------+----------+----------+
+| surat           | ada default  | kimu_    | EDIT*    | JSON ✓   |
+|                 | program      | surat    |          | HTML ✓   |
+|                 | wakaf        |          |          |          |
++-----------------+--------------+----------+----------+----------+
+| berita          | 4 items      | kimu_    | EDIT*    | JSON ✓   |
+|                 | Mushaf       | berita   |          | HTML ✓   |
+|                 | hardcoded    |          |          |          |
++-----------------+--------------+----------+----------+----------+
+| perjanjian      | template     | kimu_    | EDIT*    | JSON ✓   |
+|                 | Barang 13    | perjanj. |          | HTML ✓   |
+|                 | pasal        |          |          |          |
++-----------------+--------------+----------+----------+----------+
+| nda             | kosong       | kimu_    | EDIT     | JSON ✗   |
+|                 |              | nda      |          | HTML ✗   |
+|                 |              |          |          | (BUG)    |
++-----------------+--------------+----------+----------+----------+
+| logs            | []           | kimu_    | —        | via      |
+|                 |              | logs     |          | exportLog|
++-----------------+--------------+----------+----------+----------+
+| snapshots       | []           | kimu_    | —        | via      |
+|                 |              | snapshots|          | exportLog|
++-----------------+--------------+----------+----------+----------+
+| logo            | null         | kimu_    | —        | tampil   |
+|                 |              | logo     |          | di PDF   |
+|                 |              | (base64) |          | Surat/BA |
++-----------------+--------------+----------+----------+----------+
+| currentTab      | "project"    | ✗        | —        | ✗        |
+| logFilter       | "all"        | ✗        | —        | ✗        |
+| collapsedPasal  | {}           | ✗        | —        | ✗        |
+| prevDocState    | deep-copy    | ✗        | —        | ✗        |
+|                 | state saat   | (in-mem  |          |          |
+|                 | init         |  only)   |          |          |
++-----------------+--------------+----------+----------+----------+
+
+* = EDIT log TERCATAT hanya untuk perubahan field tingkat atas.
+    Perubahan konten items/pasal/poin/sub-poin TIDAK dicatat
+    granularly (lihat §15.2).
+
+--------------------------------------------------------------------------------
+20. KONTRAK VISUAL & DESIGN SYSTEM (DISIMPULKAN DARI CSS)
+--------------------------------------------------------------------------------
+20.1 Palet Warna
+     - Primary gold     : #8b6914  (aksen, highlight, tombol utama)
+     - Primary gold hover: #7a5c10
+     - Gold soft tint   : #f5ead8  (background pasal header, hover)
+     - Gold very soft   : #fdf6e8  (button hover background)
+     - Dark brown text  : #1a1714  (teks utama)
+     - Darker topbar    : #0f0d0b
+     - Cream bg         : #f0ece4  (body background)
+     - Paper off-white  : #f9f7f4 / #faf9f7  (item cards, hover)
+     - Paper white      : #fff
+     - Border neutral   : #e2ddd6 / #ddd8d0
+     - Muted text       : #7a6e63 / #9c9289 / #b0a89e (hierarki)
+     - Success green    : #2e7d52 / #27ae60
+     - Danger red       : #c0392b
+     - Info blue        : #1565c0 (EXPORT_PDF, NDA banner)
+     - Purple           : #6a1b9a (EXPORT_HTML)
+     - Teal             : #00796b (EXPORT_JSON)
+
+20.2 Tipografi
+     - Body : Plus Jakarta Sans, 13px, line-height 1.5
+     - Judul dokumen preview: Cormorant Garamond, 20–22px,
+                              letter-spacing 0.04–0.05em, uppercase
+     - Label sektor form: uppercase 10.5–11px, weight 700,
+                          color #8b6914
+     - Dokumen body: 12.5px, line-height 1.75–1.85
+
+20.3 Spacing & Layout
+     - Topbar height   : 56px
+     - Tabbar height   : 46px
+     - Form panel width: 400px (NDA: 420px)
+     - Sidebar history : 260px
+     - Paper width max : 860px, padding 64px 76px
+     - Paper min-height: 1000px
+     - Gap list form   : 12px antar field
+     - Card radius     : 6–12px (button 6, card 8–12)
+
+20.4 Komponen Umum
+     - .fl           — form field wrapper dengan label 11px + input
+     - .sep          — separator dengan label uppercase + hr
+     - .row/.half    — grid 2 kolom 50/50
+     - .item-card    — kartu repeater (barang/berita items)
+     - .pasal-card   — kartu pasal dengan header collapsible
+     - .poin-card    — kartu butir poin
+     - .tipe-btn     — toggle Barang/Jasa
+     - .btn-*        — 7 varian tombol
+     - .doc-*        — kelas spesifik preview dokumen
+     - .snap-card    — kartu snapshot di sidebar
+     - .log-entry    — baris log di riwayat
+     - .filter-tab   — pill filter riwayat
+     - .status-dot   — indikator di tab bar
+
+20.5 Animasi
+     - Transition input/button 0.15s
+     - Toast fade-in 0.2s ease (top offset -10px → 0)
+     - Scrollbar custom 4px, thumb #c8c0b4
+
+--------------------------------------------------------------------------------
+21. AKSESIBILITAS & KEYBOARD (STATUS SAAT INI)
+--------------------------------------------------------------------------------
+- Tab order: mengikuti urutan HTML natural; input punya label.
+- Tidak ada autofocus pada tab mana pun.
+- Tombol collapse pasal adalah <div onclick> (bukan <button>),
+  tidak focus-able via keyboard.
+- Tombol ↑/↓ reorder pasal tidak punya aria-label, hanya simbol.
+- Tombol × delete juga ikon saja tanpa aria-label.
+- Kontras teks utama cukup; #7a6e63 pada putih ~ 4.4:1 (borderline
+  WCAG AA).
+- Dialog confirm native (blocking) dipakai untuk aksi destruktif.
+- Tidak ada skip-nav link.
+
+Rekomendasi (jika ingin ke WCAG AA):
+  - Tambah aria-label pada semua icon-only buttons.
+  - Ubah pasal header ke <button> atau tambah role="button" +
+    tabindex + keydown Enter/Space.
+  - Tambah screenreader-only text pada badge notifikasi.
+
+--------------------------------------------------------------------------------
+16. BRANDING & DOMAIN CONTEXT (KONTEKS PELANGGAN)
+--------------------------------------------------------------------------------
+Dari data default dan naming di source code, dapat disimpulkan:
+  - Penyedia (p1): PT Kimu Edu Indonesia — vendor edukasi / mushaf.
+  - Penerima (p2): Yayasan Muhajir Peduli Indonesia (YMPI) — yayasan
+    wakaf Al-Qur'an.
+  - Program aktual: "Program Wakaf Al-Qur'an Gelombang 7".
+  - Prefix localStorage: "kimu_*" — menguatkan bahwa aplikasi awalnya
+    dibuat untuk KIMU Edu.
+  - Angka kuantitas baku: 20.000 / 5.000 / 10.000 eksemplar — skala
+    yayasan wakaf nasional.
+Implikasi PRD: Jika produk akan di-generalisasi, item 15.5 dan 15.6
+harus diselesaikan lebih dulu (lepaskan hard-coded domain, kosongkan
+data default, buat wizard onboarding yang meminta user mengisi profil
+organisasinya sendiri).
+
+--------------------------------------------------------------------------------
+17. RINGKASAN PRIORITAS PERBAIKAN (DERIVASI DARI BAB 15)
+--------------------------------------------------------------------------------
+Prioritas TINGGI (bug / data loss risk):
+  P1. Masukkan NDA ke getPreviewHTML, saveHTML, saveJSON, copyJSON,
+      renderHistoryFilters, dan exportLog (ref. 15.1).
+  P2. Tambahkan #panel-form-nda ke @media print selector (15.21) —
+      bug visual saat print NDA.
+  P3. Tambahkan validasi ukuran logo + resize sebelum simpan (15.8).
+  P4. Tambahkan rotasi log otomatis (15.9).
+  P5. Minta konfirmasi sebelum deleteLog (15.17) dan deletePasal
+      (15.23).
+  P6. Hapus dead code `days` di renderHistoryList (15.22).
+
+Prioritas MENENGAH (fidelity audit & UX):
+  P7. Log edit granular untuk items / poin / sub-poin (15.2).
+  P8. Trigger CREATE log saat nomor pertama kali diisi (15.3).
+  P9. Persist currentTab, logFilter, collapsedPasal (15.7).
+  P10. Ekspor "full backup" mencakup logs + snapshots + data (15.11).
+  P11. Validasi format dasar (tanggal, KTP, Rupiah) (15.12).
+  P12. Samakan default tanggal semua dokumen ke todayStr (15.24).
+  P13. Konsolidasi atau perjelas tempat vs tempatBuat di Berita (15.25).
+  P14. Tambahkan toggle "Siapa Pihak Pengungkap?" di NDA (§18) untuk
+       kasus Yayasan sebagai pengungkap.
+
+Prioritas RENDAH (polish):
+  P15. Hapus frasa "Pengadaan Mushaf" hard-coded, jadikan editable
+       (15.5).
+  P16. Kosongkan / demo-kan default project & berita items (15.6).
+  P17. Generalisasi BAST menjadi pasal editable (15.4).
+  P18. Samakan judul window dengan branding (15.13).
+  P19. Tambahkan counter halaman di print (15.20).
+  P20. Tambahkan integrity hash pada snapshot (15.16).
+  P21. Parameterized field rangkap dokumen & jenis meterai (15.27).
+  P22. Seragamkan placeholder nomor kosong antar dokumen (15.29).
+  P23. Tambah aria-label pada icon-only buttons (§21).
+  P24. Ubah pasal header ke <button> agar keyboard-accessible (§21).
+
+================================================================================
+  CATATAN UNTUK PENGEMBANGAN SELANJUTNYA (OPSIONAL / REKOMENDASI)
+================================================================================
+R1. Menambahkan validasi ukuran file logo (saat ini 2MB hanya diberitakan
+    di UI).
+R2. Memindahkan template pasal ke file terpisah agar mudah dipelihara.
+R3. Menambahkan field "PPN" eksplisit pada Surat Penawaran bila diperlukan
+    (saat ini hanya disebut di teks pasal).
+R4. Menyediakan ekspor DOCX (via library seperti docx.js) untuk kebutuhan
+    kolaborasi di Word.
+R5. Menambahkan IndexedDB atau cloud sync sebagai opsi backup — localStorage
+    bisa hilang saat clear browser data.
+R6. Menambahkan audit hash per snapshot untuk menjamin integritas dokumen
+    yang akan dicetak.
+
+================================================================================
+  END OF DOCUMENT
+================================================================================
